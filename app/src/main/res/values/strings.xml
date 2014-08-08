@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="rn:oasis:names:tc:xliff:document:1.2">
+
+    <string name="app_name">Club Manager</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="format_users">        Users: <xliff:g id="user_count">%1$s</xliff:g></string>
+    <string name="format_terms"><xliff:g id="user_count">%1$s</xliff:g>th Term</string>
+    <string name="title_activity_save_create__club">Create Club</string>
+
+</resources>

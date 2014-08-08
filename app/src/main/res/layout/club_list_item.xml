@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:minHeight="?android:attr/listPreferredItemHeight"
+    android:background="@drawable/touch_selector"
+    android:layout_marginTop="@dimen/activity_vertical_margin"
+    android:layout_marginBottom="@dimen/activity_vertical_margin">
+
+    <LinearLayout
+        android:layout_width="64sp"
+        android:layout_height="64sp"
+        android:gravity="center"
+        >
+        <ImageView
+            android:layout_width="48sp"
+            android:layout_height="48sp"
+
+            android:id="@+id/club_list_item_icon"
+            android:layout_gravity="center"
+            android:src="@drawable/art_placeholder"
+            />
+    </LinearLayout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:orientation="vertical" android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_weight="5">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="MyClub"
+            android:fontFamily="sans-serif-condensed"
+            android:id="@+id/club_list_item_name_textview"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
+
+
+<!--        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1sr Term"
+            android:fontFamily="sans-serif-condensed"
+            android:id="@+id/list_item_forecast_textview"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small" />-->
+
+
+    </LinearLayout>
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_action_person"
+        android:layout_weight="2"
+        android:id="@+id/club_list_item_users_textview"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+        android:text="999"
+        android:gravity="center_vertical"
+        />
+    <!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:orientation="vertical" android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_weight="2"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="21~"
+            android:fontFamily="sans-serif-condensed"
+            android:id="@+id/list_item_high_textview"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="23~"
+            android:fontFamily="sans-serif-condensed"
+            android:id="@+id/list_item_low_textview"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small" />
+    </LinearLayout>-->
+</LinearLayout>
