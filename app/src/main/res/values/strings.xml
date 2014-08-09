@@ -7,5 +7,28 @@
     <string name="format_users">        Users: <xliff:g id="user_count">%1$s</xliff:g></string>
     <string name="format_terms"><xliff:g id="user_count">%1$s</xliff:g>th Term</string>
     <string name="title_activity_save_create__club">Create Club</string>
+    <string name="title_dialog_create_club">Create Club</string>
+    <string name="Ok">OK</string>
+    <string name="cancel">Cancel</string>
+
+    <string-array name="colors_title_array">
+        <item>Default Color</item>
+        <item>Red</item>
+        <item>Orange</item>
+        <item>Blue</item>
+        <item>Violet</item>
+        <item>Black</item>
+        <item>Gray</item>
+
+    </string-array>
+    <string-array name="colors_values_array">
+        <item>#578683</item>
+        <item>#E00000</item>
+        <item>#f76b00</item>
+        <item>#1400c4</item>
+        <item>#B300CF</item>
+        <item>#000000</item>
+        <item>#696969</item>
+    </string-array>values
 
 </resources>

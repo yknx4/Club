@@ -55,6 +55,7 @@ public class ClubsContract {
         * */
 
 
+        public static int AT_LEAST_DISABLED = -1;
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_CLUB).build();
         public static final String TABLE_NAME = "clubs";

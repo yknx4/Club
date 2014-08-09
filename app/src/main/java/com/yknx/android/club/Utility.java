@@ -8,6 +8,24 @@ import com.yknx.android.club.data.ClubsContract;
  * Created by Yknx on 08/08/2014.
  */
 public class Utility {
+
+    public   static ContentValues createClubValues(String name, String color) {
+        String fakeName = name;
+        String fakeColor = color;
+        String fakeIcon = "";
+        int terms = 1;
+        int atLeast = ClubsContract.ClubEntry.AT_LEAST_DISABLED;
+
+// Create a new map of values, where column names are the keys
+        ContentValues values = new ContentValues();
+        values.put(ClubsContract.ClubEntry.COLUMN_CLUB_NAME, fakeName);
+        values.put(ClubsContract.ClubEntry.COLUMN_CLUB_COLOR, fakeColor);
+        values.put(ClubsContract.ClubEntry.COLUMN_CLUB_ICON_URI, fakeIcon);
+        values.put(ClubsContract.ClubEntry.COLUMN_CLUB_TERMS, terms);
+        values.put(ClubsContract.ClubEntry.COLUMN_CLUB_ATLEAST, atLeast);
+        return values;
+    }
+
     public   static ContentValues createFakeClubValues() {
         String fakeName = "댄스";
         String fakeColor = "#007FFF";

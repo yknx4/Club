@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -115,10 +116,20 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
 
 
         final ImageButton phdSet = (ImageButton)rootView.findViewById(R.id.fragment_club_settings_button);
+        final ImageButton addClubButton = (ImageButton) rootView.findViewById(R.id.fragment_club_add_club_imagebutton);
         phdSet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 addFakeData();
+            }
+        });
+        addClubButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment createClubDialog = new AddClubDialogFragment();
+                createClubDialog.show(getFragmentManager(),"create_club");
+
+
             }
         });
 

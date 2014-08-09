@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center">
+
+
+    <EditText
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/dialog_create_club_name_edittext"
+        android:hint="Club Name"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="4dp"
+        android:layout_gravity="center"
+        style="?android:attr/editTextStyle"
+        />
+
+    <Spinner
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+
+        android:id="@+id/dialog_create_color_spinner"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="4dp"
+        android:entries="@array/colors_title_array"
+
+        style="?android:attr/editTextStyle"
+        android:gravity="center"
+        android:spinnerMode="dropdown"
+      />
+
+</LinearLayout>

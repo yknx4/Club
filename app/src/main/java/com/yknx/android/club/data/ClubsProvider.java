@@ -1,8 +1,10 @@
 package com.yknx.android.club.data;
 
 import android.content.ContentProvider;
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -11,6 +13,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.util.Log;
 
+import com.yknx.android.club.Utility;
 import com.yknx.android.club.data.ClubsContract.AssistEntry;
 import com.yknx.android.club.data.ClubsContract.ClubEntry;
 import com.yknx.android.club.data.ClubsContract.RegistrationEntry;
@@ -409,6 +412,13 @@ public class ClubsProvider extends ContentProvider {
         return affected;
     }
 
+public static long addClub(Context mContext, String name, String color){
+    ContentResolver mContentResolver = mContext.getContentResolver();
 
+    ContentValues clubValues = Utility.createClubValues(name,color);
+
+    return ContentUris.parseId(mContentResolver.insert(ClubsContract.ClubEntry.CONTENT_URI, clubValues));
+
+}
 
 }
