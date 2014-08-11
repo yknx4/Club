@@ -18,6 +18,7 @@ import com.yknx.android.club.data.ClubsContract.AssistEntry;
 import com.yknx.android.club.data.ClubsContract.ClubEntry;
 import com.yknx.android.club.data.ClubsContract.RegistrationEntry;
 import com.yknx.android.club.data.ClubsContract.UserEntry;
+import com.yknx.android.club.model.Club;
 
 /**
  * Created by Yknx on 07/08/2014.
@@ -420,5 +421,29 @@ public static long addClub(Context mContext, String name, String color){
     return ContentUris.parseId(mContentResolver.insert(ClubsContract.ClubEntry.CONTENT_URI, clubValues));
 
 }
+    public static Club getClub(Context mContext,long clubId){
+        ContentResolver mContentResolver = mContext.getContentResolver();
+        Cursor data = mContentResolver.query(ClubsContract.ClubEntry.buildClubUri(clubId),null,null,null,null);
+        Club result = new Club();
+        result.id = clubId;
+        if(data.moveToFirst()){
+
+
+        result.name = data.getString(data.getColumnIndex(ClubsContract.ClubEntry.COLUMN_CLUB_NAME));
+        result.color = data.getString(data.getColumnIndex(ClubsContract.ClubEntry.COLUMN_CLUB_COLOR));
+        result.icon = Uri.parse(data.getString(data.getColumnIndex(ClubEntry.COLUMN_CLUB_ICON_URI)));
+        result.atLeast = data.getInt(data.getColumnIndex(ClubEntry.COLUMN_CLUB_ATLEAST));
+        result.terms = data.getInt(data.getColumnIndex(ClubEntry.COLUMN_CLUB_TERMS));
+        }
+        return result;
+    }
+
+    public static int updateClub(Context mContext, Club club){
+        ContentValues updatedValues = Utility.createClubValues(club);
+        int count = mContext.getContentResolver().update(
+                ClubEntry.CONTENT_URI, updatedValues, ClubEntry._ID + "= ?",
+                new String[]{Long.toString(club.id)});
+        return count;
+    }
 
 }

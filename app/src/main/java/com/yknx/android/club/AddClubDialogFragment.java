@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.yknx.android.club.data.ClubsProvider;
 
@@ -35,9 +36,20 @@ public class AddClubDialogFragment extends DialogFragment
                         String[] colors = getActivity().getResources().getStringArray(R.array.colors_values_array);
                         EditText nameView = (EditText) dialogView.findViewById(R.id.dialog_create_club_name_edittext);
                         Spinner colorSpinner = (Spinner) dialogView.findViewById(R.id.dialog_create_color_spinner);
+                        String msg;
                         String clubName = nameView.getText().toString();
                         String color = colors[colorSpinner.getSelectedItemPosition()];
-                        ClubsProvider.addClub(getActivity(),clubName,color);
+                        if (clubName != null && !clubName.isEmpty()) {
+                            long mid = ClubsProvider.addClub(getActivity(), clubName, color);
+                            if(mid>0)
+                            msg= clubName+" added succesfully.";
+                            else
+                                msg= clubName+" couldn't be added.";
+                        }
+                        else {
+                            msg="A club needs a name.";
+                        }
+                        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

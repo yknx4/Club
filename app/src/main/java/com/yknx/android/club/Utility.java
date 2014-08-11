@@ -3,13 +3,33 @@ package com.yknx.android.club;
 import android.content.ContentValues;
 
 import com.yknx.android.club.data.ClubsContract;
+import com.yknx.android.club.model.Club;
 
 /**
  * Created by Yknx on 08/08/2014.
  */
 public class Utility {
 
-    public   static ContentValues createClubValues(String name, String color) {
+
+    public static ContentValues createClubValues(Club club){
+        String fakeName = club.name;
+        String fakeColor = club.color;
+        String fakeIcon="";
+        if(club.icon!=null)
+        fakeIcon = club.icon.toString();
+        int terms = club.terms;
+        int atLeast = club.atLeast;
+
+// Create a new map of values, where column names are the keys
+        ContentValues values = new ContentValues();
+        values.put(ClubsContract.ClubEntry.COLUMN_CLUB_NAME, fakeName);
+        values.put(ClubsContract.ClubEntry.COLUMN_CLUB_COLOR, fakeColor);
+        values.put(ClubsContract.ClubEntry.COLUMN_CLUB_ICON_URI, fakeIcon);
+        values.put(ClubsContract.ClubEntry.COLUMN_CLUB_TERMS, terms);
+        values.put(ClubsContract.ClubEntry.COLUMN_CLUB_ATLEAST, atLeast);
+        return values;
+    }
+    public static ContentValues createClubValues(String name, String color) {
         String fakeName = name;
         String fakeColor = color;
         String fakeIcon = "";

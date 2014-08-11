@@ -6,7 +6,7 @@
     <string name="action_settings">Settings</string>
     <string name="format_users">        Users: <xliff:g id="user_count">%1$s</xliff:g></string>
     <string name="format_terms"><xliff:g id="user_count">%1$s</xliff:g>th Term</string>
-    <string name="title_activity_save_create__club">Create Club</string>
+    <string name="title_activity_save_create__club">Edit Club</string>
     <string name="title_dialog_create_club">Create Club</string>
     <string name="Ok">OK</string>
     <string name="cancel">Cancel</string>

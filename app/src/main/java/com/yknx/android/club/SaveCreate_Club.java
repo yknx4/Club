@@ -1,27 +1,29 @@
 package com.yknx.android.club;
 
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
 
-import com.yknx.android.club.R;
+import com.yknx.android.club.data.ClubsContract;
 
 public class SaveCreate_Club extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent args = getIntent();
         setContentView(R.layout.activity_save_create__club);
         if (savedInstanceState == null) {
+            EditClubFragment frag = null;
+            long clubId = args.getLongExtra(ClubsContract.ClubEntry._ID,-1);
+            if(clubId==-1) this.finish();
+            else {
+                frag = EditClubFragment.getClubFragment(clubId);
+            }
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
+                    .add(R.id.container, frag)
                     .commit();
         }
     }
@@ -40,25 +42,11 @@ public class SaveCreate_Club extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
 
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_save_create__club, container, false);
-            return rootView;
-        }
-    }
 }
