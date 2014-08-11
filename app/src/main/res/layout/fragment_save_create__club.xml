@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -6,28 +6,171 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.yknx.android.club.SaveCreate_Club$PlaceholderFragment">
+    tools:context="com.yknx.android.club.SaveCreate_Club.EditClubFragment"
+    android:orientation="vertical">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="false">
 
-        <ImageButton
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:id="@+id/imageView"
-            android:src="@drawable/default_icon"
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Details"
+            android:id="@+id/textView"
+            style="?android:attr/listSeparatorTextViewStyle" />
 
-            />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp">
 
-        <EditText
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageButton
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:id="@+id/fragmen_save_create_icon_imageview"
+                    android:src="@drawable/default_icon"
+                    style="@style/Widget.AppCompat.Light.Base.Spinner"
+     />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center_vertical">
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:ems="10"
+                    android:id="@+id/fragmen_save_create_club_name_edittext"
+                    android:hint="Club Name" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/fragmen_save_create_terms_edittext"
+                    android:hint="Terms" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Parameters"
+            android:id="@+id/textView2"
+            style="?android:attr/listSeparatorTextViewStyle" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:id="@+id/linearLayout">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Color"
+                android:id="@+id/fragment_save_create_color_lavel"
+                android:fontFamily="sans-serif-normal"
+                android:layout_margin="4dp" />
+            <Spinner
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+
+                android:id="@+id/fragment_save_create_color_spinner"
+                android:layout_marginTop="4dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginBottom="4dp"
+                android:entries="@array/colors_title_array"
+                android:gravity="center"
+                android:spinnerMode="dropdown"
+                android:text="Color"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Needed assists  "
+                android:id="@+id/textView3"
+                android:fontFamily="sans-serif-normal"
+                />
+
+            <SeekBar
+                android:id="@+id/fragmen_save_create_assists_seekbar"
+                android:max="10"
+                android:progress="0"
+                style="@style/button_filllayout" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="1"
+                android:padding="4dp"
+                android:fontFamily="sans-serif-normal"
+                android:id="@+id/fragment_save_create_spinnerhelp_textview" />
+
+        </LinearLayout>
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:text="Name"
-            android:ems="10"
-            android:id="@+id/editText" />
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Assists needed to be on list."
+            android:id="@+id/textView5"
+            android:padding="4dp"
+            android:textColor="@color/club_default"
+            android:fontFamily="sans-serif-normal"
+            android:textStyle="italic"
+            />
     </LinearLayout>
 
-</LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true">
+
+        <Button
+            android:text="Cancel"
+            android:id="@+id/fragmen_save_create_cancel_button"
+            style="@style/button_filllayout" />
+
+        <Button
+            android:text="Save"
+            android:id="@+id/fragmen_save_create_save_button"
+            style="@style/button_filllayout" />
+    </LinearLayout>
+
+</RelativeLayout>

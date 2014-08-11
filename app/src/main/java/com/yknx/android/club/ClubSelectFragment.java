@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
@@ -115,19 +116,34 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
         final View rootView = inflater.inflate(R.layout.fragment_club_select, container, false);
 
 
+
         final ImageButton phdSet = (ImageButton)rootView.findViewById(R.id.fragment_club_settings_button);
         final ImageButton addClubButton = (ImageButton) rootView.findViewById(R.id.fragment_club_add_club_imagebutton);
+        phdSet.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                addFakeData();
+                return false;
+            }
+        });
         phdSet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addFakeData();
+                Intent openClubSettings = new Intent(getActivity(),SaveCreate_Club.class);
+                Cursor data =mClubAdapter.getCursor();
+                data.moveToPosition(mListViewPosition);
+
+                long iPos = data.getLong(data.getColumnIndex(ClubsContract.ClubEntry._ID));
+
+                openClubSettings.putExtra(ClubsContract.ClubEntry._ID,iPos);
+                startActivity(openClubSettings);
             }
         });
         addClubButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DialogFragment createClubDialog = new AddClubDialogFragment();
-                createClubDialog.show(getFragmentManager(),"create_club");
+                createClubDialog.show(getFragmentManager(), "create_club");
 
 
             }
