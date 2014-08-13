@@ -32,17 +32,15 @@ import java.util.Random;
 /**
  * Created by Yknx on 08/08/2014.
  */
-public class ClubSelectFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class ClubSelectFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    private static final String LISTVIEW_POSITION = "lv_position";
+    private static final int CLUB_LOADER = 0;
     private final String LOG_TAG = ClubSelectFragment.class.getSimpleName();
     ClubAdapter mClubAdapter;
     private int mListViewPosition = ListView.INVALID_POSITION;
     private ListView listView;
     private View mainView;
-
-    private static final String LISTVIEW_POSITION = "lv_position";
-
-    private static final int CLUB_LOADER = 0;
 
     public ClubSelectFragment() {
     }
@@ -51,20 +49,20 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
 
-        String sortOrder = ClubsContract.ClubEntry.COLUMN_CLUB_NAME+" ASC ";
-        return new CursorLoader(getActivity(), ClubsContract.ClubEntry.CONTENT_URI,null,null,null,sortOrder);
+        String sortOrder = ClubsContract.ClubEntry.COLUMN_CLUB_NAME + " ASC ";
+        return new CursorLoader(getActivity(), ClubsContract.ClubEntry.CONTENT_URI, null, null, null, sortOrder);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if(data.getCount()==0){
+        if (data.getCount() == 0) {
             //TODO: Add handler when Data = 0
         }
         mClubAdapter.swapCursor(data);
 
-        if(mListViewPosition!= ListView.INVALID_POSITION){
+        if (mListViewPosition != ListView.INVALID_POSITION) {
             listView.setSelection(mListViewPosition);
-            setHeader(mainView,mListViewPosition);
+            setHeader(mainView, mListViewPosition);
         }
 
     }
@@ -77,23 +75,46 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if(mListViewPosition!= ListView.INVALID_POSITION){
-            outState.putInt(LISTVIEW_POSITION,mListViewPosition);
+        if (mListViewPosition != ListView.INVALID_POSITION) {
+            outState.putInt(LISTVIEW_POSITION, mListViewPosition);
         }
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getLoaderManager().initLoader(CLUB_LOADER,null,this);
+        getLoaderManager().initLoader(CLUB_LOADER, null, this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         //if (mLocation != null && !mLocation.equals(Utility.getPreferredLocation(getActivity()))) {
-            getLoaderManager().restartLoader(CLUB_LOADER, null, this);
+        getLoaderManager().restartLoader(CLUB_LOADER, null, this);
         //}
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mClubAdapter = new ClubAdapter(
+                getActivity(),
+                null,
+                0
+        );
+    }
+
+    private Cursor getCurrentCursorAtPosition(int position){
+        if (mClubAdapter== null)return null;
+        Cursor data = mClubAdapter.getCursor();
+        data.moveToPosition(position);
+        return data;
+    }
+    private long getCurrentClubID(){
+        if (mClubAdapter== null)return ListView.INVALID_POSITION;
+        Cursor data = getCurrentCursorAtPosition(mListViewPosition);
+
+        return data.getLong(data.getColumnIndex(ClubsContract.ClubEntry._ID));
     }
 
     @Override
@@ -101,23 +122,13 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
                              Bundle savedInstanceState) {
         if (savedInstanceState != null && savedInstanceState.containsKey(LISTVIEW_POSITION))
             mListViewPosition = savedInstanceState.getInt(LISTVIEW_POSITION);
-        mClubAdapter = new ClubAdapter(
-                getActivity(),
-                null,
-                0
-        );
-
-
-
-
 
 
 
         final View rootView = inflater.inflate(R.layout.fragment_club_select, container, false);
 
 
-
-        final ImageButton phdSet = (ImageButton)rootView.findViewById(R.id.fragment_club_settings_button);
+        final ImageButton phdSet = (ImageButton) rootView.findViewById(R.id.fragment_club_settings_button);
         final ImageButton addClubButton = (ImageButton) rootView.findViewById(R.id.fragment_club_add_club_imagebutton);
         phdSet.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -129,13 +140,15 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
         phdSet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent openClubSettings = new Intent(getActivity(),SaveCreate_Club.class);
-                Cursor data =mClubAdapter.getCursor();
-                data.moveToPosition(mListViewPosition);
+                Intent openClubSettings = new Intent(getActivity(), SaveCreate_Club.class);
+                /*Cursor data = mClubAdapter.getCursor();
+                data.moveToPosition(mListViewPosition);*/
+                //Cursor data = getCurrentCursorAtPosition(mListViewPosition);
 
-                long iPos = data.getLong(data.getColumnIndex(ClubsContract.ClubEntry._ID));
+                //long iPos = data.getLong(data.getColumnIndex(ClubsContract.ClubEntry._ID));
 
-                openClubSettings.putExtra(ClubsContract.ClubEntry._ID,iPos);
+//                openClubSettings.putExtra(ClubsContract.ClubEntry._ID, iPos);
+                openClubSettings.putExtra(ClubsContract.ClubEntry._ID, getCurrentClubID());
                 startActivity(openClubSettings);
             }
         });
@@ -149,6 +162,22 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
             }
         });
 
+        final ImageButton openClubButton = (ImageButton) rootView.findViewById(R.id.imagebutton_openclub);
+
+
+        openClubButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent openClubDetails = new Intent(getActivity(), club_details.class);
+                openClubDetails.putExtra(ClubsContract.ClubEntry._ID, getCurrentClubID());
+                startActivity(openClubDetails);
+            }
+        });
+
+        if(mListViewPosition==ListView.INVALID_POSITION){
+            openClubButton.setEnabled(false);
+        }
+
         listView = (ListView) rootView.findViewById(R.id.listview_clubs);
         listView.setAdapter(mClubAdapter);
 
@@ -156,7 +185,9 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 mListViewPosition = position;
-                setHeader(rootView,position);
+                setHeader(rootView, position);
+                openClubButton.setEnabled(true);
+
 
             }
         });
@@ -172,18 +203,18 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
     private void setHeader(View rootView, int position) {
 
         Cursor cursor = mClubAdapter.getCursor();
-        if(!cursor.moveToPosition(position)) return;
+        if (!cursor.moveToPosition(position)) return;
         String icon_uri = cursor.getString(cursor.getColumnIndex(ClubsContract.ClubEntry.COLUMN_CLUB_ICON_URI));
         String name = cursor.getString(cursor.getColumnIndex(ClubsContract.ClubEntry.COLUMN_CLUB_NAME));
         long clubId = cursor.getLong(cursor.getColumnIndex(ClubsContract.ClubEntry._ID));
 
         int termps = cursor.getInt(cursor.getColumnIndex(ClubsContract.ClubEntry.COLUMN_CLUB_TERMS));
 
-        LinearLayout header = (LinearLayout)rootView.findViewById(R.id.fragment_club_select_header);
-        ImageView headerIcon = (ImageView)rootView.findViewById(R.id.fragment_club_select_club_icon);
-        TextView nameView = (TextView)rootView.findViewById(R.id.fragment_club_select_title_textview);
-        TextView usersView = (TextView)rootView.findViewById(R.id.fragment_club_select_users_textview);
-        TextView termView = (TextView)rootView.findViewById(R.id.fragment_club_select_term_textview);
+        LinearLayout header = (LinearLayout) rootView.findViewById(R.id.fragment_club_select_header);
+        ImageView headerIcon = (ImageView) rootView.findViewById(R.id.fragment_club_select_club_icon);
+        TextView nameView = (TextView) rootView.findViewById(R.id.fragment_club_select_title_textview);
+        TextView usersView = (TextView) rootView.findViewById(R.id.fragment_club_select_users_textview);
+        TextView termView = (TextView) rootView.findViewById(R.id.fragment_club_select_term_textview);
 
         Cursor clubs = getActivity().getContentResolver().query(ClubsContract.RegistrationEntry.builRegistrationUriWithClub(clubId), null, null, null, null);
 
@@ -191,7 +222,7 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
         Random mRandom = new Random();
 
         String users = getActivity().getString(R.string.format_users, clubs.getCount());
-        String term = getActivity().getString(R.string.format_terms, mRandom.nextInt(termps)+1);
+        String term = getActivity().getString(R.string.format_terms, mRandom.nextInt(termps) + 1);
 
 
         nameView.setText(name);
@@ -201,11 +232,10 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
         String color = cursor.getString(cursor.getColumnIndex(ClubsContract.ClubEntry.COLUMN_CLUB_COLOR));
         header.setBackgroundColor(Color.parseColor(color));
 
-        if(icon_uri==null || icon_uri.equals("")) {
+        if (icon_uri == null || icon_uri.equals("")) {
             //headerIcon.setImageResource(R.drawable.ic_action_about);
             headerIcon.setImageBitmap(null);
-        }
-        else headerIcon.setImageURI(Uri.parse(icon_uri));
+        } else headerIcon.setImageURI(Uri.parse(icon_uri));
     }
 
     public void deleteAllRecords() {
@@ -253,7 +283,6 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
         Log.d(LOG_TAG, "New club id: " + clubRowId);
 
 
-
         ContentValues firstUserValues = Utility.createFakeUserValues1();
         long firstUserRowId;
         firstUserRowId = ContentUris.parseId(mContentResolver.insert(ClubsContract.UserEntry.CONTENT_URI, firstUserValues));
@@ -267,7 +296,6 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
 
 
         Log.d(LOG_TAG, "New User Row id: " + secondUserRowId);
-
 
 
         ContentValues registrationValues = Utility.createRegistration(clubRowId, firstUserRowId);
@@ -286,12 +314,6 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
         Log.d(LOG_TAG, "New registration id: " + registrationRowId2);
 
 
-
-
-
-
-
-
         ContentValues assistValues = Utility.createFakeAssist(registrationRowId1, 1);
         long assistRowId1;
         assistRowId1 = ContentUris.parseId(mContentResolver.insert(ClubsContract.AssistEntry.CONTENT_URI, assistValues));
@@ -302,8 +324,6 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
         long assistRowId2;
         assistRowId2 = ContentUris.parseId(mContentResolver.insert(ClubsContract.AssistEntry.CONTENT_URI, assistValues));
         Log.d(LOG_TAG, "New assist id: " + assistRowId2);
-
-
 
 
     }

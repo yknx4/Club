@@ -19,7 +19,6 @@
         <item>Violet</item>
         <item>Black</item>
         <item>Gray</item>
-
     </string-array>
     <string-array name="colors_values_array">
         <item>#578683</item>
@@ -29,6 +28,13 @@
         <item>#B300CF</item>
         <item>#000000</item>
         <item>#696969</item>
-    </string-array>values
+    </string-array>
+values    <string name="title_activity_club_details">club_details</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">Example action</string>
 
 </resources>

@@ -32,6 +32,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.yknx.android.club.ClubSelect" />
         </activity>
+        <activity
+            android:name=".club_details"
+            android:label="@string/title_activity_club_details">
+        </activity>
     </application>
 
 </manifest>
