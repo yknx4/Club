@@ -121,8 +121,8 @@ public class ClubsDbHelper extends SQLiteOpenHelper {
                 // To assure the application have just one weather entry per day
                 // per location, it's created a UNIQUE constraint with REPLACE strategy
                 " );";
-        Log.d(ClubsDbHelper.class.getSimpleName(),SQL_CREATE_REGISTRATIONS_TABLE);
-        Log.d(ClubsDbHelper.class.getSimpleName(),SQL_CREATE_ASSISTS_TABLE);
+       // Log.d(ClubsDbHelper.class.getSimpleName(),SQL_CREATE_REGISTRATIONS_TABLE);
+        //Log.d(ClubsDbHelper.class.getSimpleName(),SQL_CREATE_ASSISTS_TABLE);
 
 
 
