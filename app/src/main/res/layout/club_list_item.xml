@@ -35,9 +35,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="MyClub"
-            android:fontFamily="sans-serif-condensed"
             android:id="@+id/club_list_item_name_textview"
-            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
+            style="@style/condensed_large" />
 
 
 <!--        <TextView

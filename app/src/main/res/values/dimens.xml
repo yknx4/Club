@@ -6,5 +6,6 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fragment_club_select_header_paddingTop">16dp</dimen>
     <dimen name="navigation_drawer_width">240dp</dimen>
+    <dimen name="_0_dimen">0dp</dimen>
 
 </resources>

@@ -168,7 +168,7 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
         openClubButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent openClubDetails = new Intent(getActivity(), club_details.class);
+                Intent openClubDetails = new Intent(getActivity(), ClubDetails.class);
                 openClubDetails.putExtra(ClubsContract.ClubEntry._ID, getCurrentClubID());
                 startActivity(openClubDetails);
             }

@@ -33,7 +33,7 @@
                 android:value="com.yknx.android.club.ClubSelect" />
         </activity>
         <activity
-            android:name=".club_details"
+            android:name=".ClubDetails"
             android:label="@string/title_activity_club_details">
         </activity>
     </application>

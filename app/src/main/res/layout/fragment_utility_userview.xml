@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="4dp">
+
+        <TextView
+            android:layout_width="@dimen/_0_dimen"
+            android:layout_height="wrap_content"
+            android:text="Jorge Alejandro Figueroa Pérez"
+            android:id="@+id/textView"
+            style="@style/condensed_large"
+            android:layout_weight="1"
+            android:paddingLeft="4dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_action_time"
+            android:id="@+id/textView2"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:text="7"
+            android:gravity="center_vertical"
+            android:paddingRight="4dp" />
+    </LinearLayout>
+
+    <TextView
+        style="?android:attr/listSeparatorTextViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Assists"
+        android:id="@+id/textView3" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/listView"
+        android:paddingTop="4dp"
+        tools:listitem="@layout/list_item_assistitem"
+         />
+
+</LinearLayout>
