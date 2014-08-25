@@ -190,7 +190,7 @@ public class ClubsProvider extends ContentProvider {
                 break;
             }
             case USER_ID: {
-                retCursor = basicQueryWithId(ClubEntry.TABLE_NAME, ClubEntry._ID, ContentUris.parseId(uri), projection, sortOrder);
+                retCursor = basicQueryWithId(UserEntry.TABLE_NAME, UserEntry._ID, ContentUris.parseId(uri), projection, sortOrder);
                 break;
             }
             case ASSIST_ID:{
@@ -312,7 +312,7 @@ public class ClubsProvider extends ContentProvider {
             case USER:
                 _id = db.insert(UserEntry.TABLE_NAME, null, contentValues);
                 if (_id > 0) {
-                    returnUri = UserEntry.builUserUri(_id);
+                    returnUri = UserEntry.buildUserUri(_id);
                 } else throw new SQLException("Failed to insert row into " + uri);
                 break;
             case REGISTRATION:
@@ -436,6 +436,33 @@ public static long addClub(Context mContext, String name, String color){
         result.terms = data.getInt(data.getColumnIndex(ClubEntry.COLUMN_CLUB_TERMS));
         }
         return result;
+    }
+
+    public static int getRegistration(Context mContext,long clubId, long userId){
+        ContentResolver mContentResolver = mContext.getContentResolver();
+        Uri userClubs = RegistrationEntry.builRegistrationUriWithUser(userId);
+        Cursor cUserClubs = mContentResolver.query(userClubs,null,null,null,null);
+        if(hasClub(cUserClubs,clubId)){
+            int id = cUserClubs.getInt(cUserClubs.getColumnIndex(RegistrationEntry._ID));
+
+            return id;
+        }
+        else {
+            return RegistrationEntry.NO_REGISTRATION;
+        }
+    }
+    private static Boolean hasClub (Cursor data, long clubId){
+        if(data.moveToFirst()){
+            long regClub;
+            int columnId = data.getColumnIndex(RegistrationEntry.COLUMN_REGISTRATION_CLUB);
+            do{
+                regClub = data.getLong(columnId);
+                if(regClub==clubId) return true;
+            }
+            while (data.moveToNext());
+        }
+        return false;
+
     }
 
     public static int updateClub(Context mContext, Club club){

@@ -1,4 +1,4 @@
-package com.yknx.android.club;
+package com.yknx.android.club.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.yknx.android.club.R;
 import com.yknx.android.club.data.ClubsContract;
 
 /**
@@ -20,6 +21,7 @@ public class ClubAdapter extends CursorAdapter {
 
     private final int VIEW_TYPE_TODAY =0;
     private final int VIEW_TYPE_DEFAULT =1;
+
 
 
     public ClubAdapter(Context context, Cursor c, int flags) {
@@ -44,7 +46,7 @@ public class ClubAdapter extends CursorAdapter {
 
         switch (viewType){
             case VIEW_TYPE_TODAY:
-                layoutId=R.layout.club_list_item;
+                layoutId= R.layout.club_list_item;
                 break;
             case VIEW_TYPE_DEFAULT:
                 layoutId=R.layout.club_list_item;

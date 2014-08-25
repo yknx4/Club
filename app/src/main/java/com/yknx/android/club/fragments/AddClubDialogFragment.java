@@ -1,4 +1,4 @@
-package com.yknx.android.club;
+package com.yknx.android.club.fragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.yknx.android.club.R;
 import com.yknx.android.club.data.ClubsProvider;
 
 /**

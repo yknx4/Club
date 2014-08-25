@@ -100,7 +100,7 @@ public class ClubsContract {
         public static final String COLUMN_USER_EMAIL = "email";
         public static final String COLUMN_USER_PICTURE = "picture";
         public static final String COLUMN_USER_NOTE = "note";
-        public static Uri builUserUri(long id) {
+        public static Uri buildUserUri(long id) {
             Uri contentUri = CONTENT_URI.buildUpon().appendPath(ID_PATH).build();
             Log.d(LOG_TAG,"buildUserUri(long): "+contentUri+ " with id "+id);
             return ContentUris.withAppendedId(contentUri, id);
@@ -126,7 +126,7 @@ public class ClubsContract {
         *  /registration/user/#
         *
         * */
-
+        public static final int NO_REGISTRATION = -1;
         public static final String CLUB_PATH = "club";
         public static final String USER_PATH = "user";
         public static final String ID_PATH = "id";
@@ -165,7 +165,6 @@ public class ClubsContract {
         public static String getUserFromUri(Uri uri){
             return uri.getLastPathSegment();
         }
-
 
 
 

@@ -3,5 +3,5 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.yknx.android.club.SaveCreate_Club"
+    tools:context="com.yknx.android.club.activities.SaveCreate_Club"
     tools:ignore="MergeRootFrame" />

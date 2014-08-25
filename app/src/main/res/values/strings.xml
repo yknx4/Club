@@ -29,7 +29,7 @@
         <item>#000000</item>
         <item>#696969</item>
     </string-array>
-values        <string name="title_activity_club_details">club_details</string>
+values        <string name="title_activity_club_details">Club Details</string>
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
@@ -37,5 +37,9 @@ values        <string name="title_activity_club_details">club_details</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_addasisst">Assists</string>
+    <string name="title_registeruser">Users</string>
+    <string name="show_list">Stats</string>
+    <string name="assist_title_string">Assists</string>
 
 </resources>

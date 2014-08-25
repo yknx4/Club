@@ -1,9 +1,20 @@
 package com.yknx.android.club;
 
 import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.graphics.Color;
+import android.net.Uri;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.yknx.android.club.data.ClubsContract;
 import com.yknx.android.club.model.Club;
+
+import java.util.Date;
+import java.util.Random;
 
 /**
  * Created by Yknx on 08/08/2014.
@@ -131,5 +142,49 @@ public class Utility {
         testValues.put(ClubsContract.AssistEntry.COLUMN_ASSIST_TERM, term);
         testValues.put(ClubsContract.AssistEntry.COLUMN_ASSIST_DATE, "20140910");
         return testValues;
+    }
+    public   static ContentValues createAssist(long registrationId, int term) {
+        ContentValues testValues = new ContentValues();
+
+        testValues.put(ClubsContract.AssistEntry.COLUMN_ASSIST_REGISTRATION,registrationId);
+        testValues.put(ClubsContract.AssistEntry.COLUMN_ASSIST_TERM, term);
+        testValues.put(ClubsContract.AssistEntry.COLUMN_ASSIST_DATE, ClubsContract.getDbDateString(new Date()));
+        return testValues;
+    }
+
+    public static void setHeader(View rootView, int position, Cursor cursor, Context mContext){
+        if (!cursor.moveToPosition(position)) return;
+        String icon_uri = cursor.getString(cursor.getColumnIndex(ClubsContract.ClubEntry.COLUMN_CLUB_ICON_URI));
+        String name = cursor.getString(cursor.getColumnIndex(ClubsContract.ClubEntry.COLUMN_CLUB_NAME));
+        long clubId = cursor.getLong(cursor.getColumnIndex(ClubsContract.ClubEntry._ID));
+
+        int termps = cursor.getInt(cursor.getColumnIndex(ClubsContract.ClubEntry.COLUMN_CLUB_TERMS));
+
+        LinearLayout header = (LinearLayout) rootView.findViewById(R.id.fragment_club_select_header);
+        ImageView headerIcon = (ImageView) rootView.findViewById(R.id.fragment_club_select_club_icon);
+        TextView nameView = (TextView) rootView.findViewById(R.id.fragment_club_select_title_textview);
+        TextView usersView = (TextView) rootView.findViewById(R.id.fragment_club_select_users_textview);
+        TextView termView = (TextView) rootView.findViewById(R.id.fragment_club_select_term_textview);
+
+        Cursor clubs = mContext.getContentResolver().query(ClubsContract.RegistrationEntry.builRegistrationUriWithClub(clubId), null, null, null, null);
+
+
+        Random mRandom = new Random();
+
+        String users = mContext.getString(R.string.format_users, clubs.getCount());
+        String term = mContext.getString(R.string.format_terms, mRandom.nextInt(termps) + 1);
+
+
+        nameView.setText(name);
+        usersView.setText(users);
+        termView.setText(term);
+
+        String color = cursor.getString(cursor.getColumnIndex(ClubsContract.ClubEntry.COLUMN_CLUB_COLOR));
+        header.setBackgroundColor(Color.parseColor(color));
+
+        if (icon_uri == null || icon_uri.equals("")) {
+            //headerIcon.setImageResource(R.drawable.ic_action_about);
+            headerIcon.setImageBitmap(null);
+        } else headerIcon.setImageURI(Uri.parse(icon_uri));
     }
 }

@@ -1,4 +1,4 @@
-package com.yknx.android.club;
+package com.yknx.android.club.fragments;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -6,8 +6,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -20,14 +18,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
+import com.yknx.android.club.adapters.ClubAdapter;
+import com.yknx.android.club.activities.ClubDetails;
+import com.yknx.android.club.R;
+import com.yknx.android.club.activities.SaveCreate_Club;
+import com.yknx.android.club.Utility;
 import com.yknx.android.club.data.ClubsContract;
-
-import java.util.Random;
 
 /**
  * Created by Yknx on 08/08/2014.
@@ -169,7 +167,7 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
             @Override
             public void onClick(View view) {
                 Intent openClubDetails = new Intent(getActivity(), ClubDetails.class);
-                openClubDetails.putExtra(ClubsContract.ClubEntry._ID, getCurrentClubID());
+                openClubDetails.putExtra(DetailAssistFragment.ARG_CLUB, getCurrentClubID());
                 startActivity(openClubDetails);
             }
         });
@@ -203,39 +201,8 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
     private void setHeader(View rootView, int position) {
 
         Cursor cursor = mClubAdapter.getCursor();
-        if (!cursor.moveToPosition(position)) return;
-        String icon_uri = cursor.getString(cursor.getColumnIndex(ClubsContract.ClubEntry.COLUMN_CLUB_ICON_URI));
-        String name = cursor.getString(cursor.getColumnIndex(ClubsContract.ClubEntry.COLUMN_CLUB_NAME));
-        long clubId = cursor.getLong(cursor.getColumnIndex(ClubsContract.ClubEntry._ID));
+        Utility.setHeader(rootView, position, cursor, getActivity());
 
-        int termps = cursor.getInt(cursor.getColumnIndex(ClubsContract.ClubEntry.COLUMN_CLUB_TERMS));
-
-        LinearLayout header = (LinearLayout) rootView.findViewById(R.id.fragment_club_select_header);
-        ImageView headerIcon = (ImageView) rootView.findViewById(R.id.fragment_club_select_club_icon);
-        TextView nameView = (TextView) rootView.findViewById(R.id.fragment_club_select_title_textview);
-        TextView usersView = (TextView) rootView.findViewById(R.id.fragment_club_select_users_textview);
-        TextView termView = (TextView) rootView.findViewById(R.id.fragment_club_select_term_textview);
-
-        Cursor clubs = getActivity().getContentResolver().query(ClubsContract.RegistrationEntry.builRegistrationUriWithClub(clubId), null, null, null, null);
-
-
-        Random mRandom = new Random();
-
-        String users = getActivity().getString(R.string.format_users, clubs.getCount());
-        String term = getActivity().getString(R.string.format_terms, mRandom.nextInt(termps) + 1);
-
-
-        nameView.setText(name);
-        usersView.setText(users);
-        termView.setText(term);
-
-        String color = cursor.getString(cursor.getColumnIndex(ClubsContract.ClubEntry.COLUMN_CLUB_COLOR));
-        header.setBackgroundColor(Color.parseColor(color));
-
-        if (icon_uri == null || icon_uri.equals("")) {
-            //headerIcon.setImageResource(R.drawable.ic_action_about);
-            headerIcon.setImageBitmap(null);
-        } else headerIcon.setImageURI(Uri.parse(icon_uri));
     }
 
     public void deleteAllRecords() {

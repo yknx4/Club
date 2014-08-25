@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".ClubSelect"
+            android:name=".activities.ClubSelect"
             android:label="@string/app_name"
             android:theme="@style/ClubSelectActionBarTheme" >
             <intent-filter>
@@ -25,15 +25,15 @@
             android:authorities="com.yknx.android.club" />
 
         <activity
-            android:name=".SaveCreate_Club"
+            android:name=".activities.SaveCreate_Club"
             android:label="@string/title_activity_save_create__club"
-            android:parentActivityName=".ClubSelect" >
+            android:parentActivityName=".activities.ClubSelect" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.yknx.android.club.ClubSelect" />
         </activity>
         <activity
-            android:name=".ClubDetails"
+            android:name=".activities.ClubDetails"
             android:label="@string/title_activity_club_details">
         </activity>
     </application>
