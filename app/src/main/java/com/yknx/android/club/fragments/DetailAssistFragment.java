@@ -15,6 +15,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +50,8 @@ public class DetailAssistFragment extends Fragment implements LoaderManager.Load
     private DetailAssistFragment self;
     // TODO: Rename and change types of parameters
     private String mAccount = "";
+    private boolean toRegister = false;
+
     private String getAccount(){
         if(mAccount.isEmpty()) return "0";
         else  return mAccount;
@@ -101,7 +104,8 @@ public class DetailAssistFragment extends Fragment implements LoaderManager.Load
             FragmentManager fm = getChildFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
 
-            fm.beginTransaction();
+            //fm.beginTransaction();
+            ft.setCustomAnimations(R.anim.abc_slide_in_bottom,R.anim.abc_slide_out_bottom);
             Fragment fragOne = new UtilityUserAssistsFragment();
             Bundle arguments = new Bundle();
             arguments.putBoolean("shouldYouCreateAChildFragment", true);
@@ -134,15 +138,17 @@ public class DetailAssistFragment extends Fragment implements LoaderManager.Load
         addAssistButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(userId!=-1){
-                    ContentValues assist = Utility.createAssist(mRegistration,mTerm);
-                    long assistRowId = ContentUris.parseId(mContentResolver.insert(ClubsContract.AssistEntry.CONTENT_URI, assist));
-                    if(assistRowId!=-1){
-                        if(currentFragment!=null)fm.beginTransaction().remove(currentFragment).commit();
-                        Toast.makeText(getActivity(),"Assist added to "+mAccount+".",Toast.LENGTH_SHORT).show();
-                        account.setText("");
-                    }
-                };
+                addAssistToCurrent();
+            }
+        });
+
+        account.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if(keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER){
+                    addAssistToCurrent();
+                }
+                return false;
             }
         });
 
@@ -156,19 +162,47 @@ public class DetailAssistFragment extends Fragment implements LoaderManager.Load
             public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
                 /*Bundle args = new Bundle();
                 args.putString(ClubsContract.UserEntry.COLUMN_USER_ACCOUNT,charSequence.toString());*/
-                mAccount = charSequence.toString();
-                if(mLoaderManager.getLoader(LOADER_ID)!=null)
-                    mLoaderManager.restartLoader(LOADER_ID,null,self);
-                else
-                    mLoaderManager.initLoader(LOADER_ID,null,self);
-            }
+            mAccount = charSequence.toString();
+            if (mLoaderManager.getLoader(LOADER_ID) != null)
+                mLoaderManager.restartLoader(LOADER_ID, null, self);
+            else
+                mLoaderManager.initLoader(LOADER_ID, null, self);
+        }
 
-            @Override
-            public void afterTextChanged(Editable editable) {
+        @Override
+        public void afterTextChanged(Editable editable) {
 
+        }
+    });
+    return mView;
+}
+
+    private void removeFragment(Fragment frag){
+        if(fm==null || frag ==null)return;
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.setCustomAnimations(R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_bottom,R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_bottom);
+
+        ft.remove(frag).commit();
+
+
+    }
+
+    private void addAssistToCurrent() {
+        if(userId!=-1){
+            if(toRegister){
+                ContentValues registration = Utility.createRegistration(mClub,userId);
+                mRegistration = ContentUris.parseId(mContentResolver.insert(ClubsContract.RegistrationEntry.CONTENT_URI,registration));
+                toRegister=false;
             }
-        });
-        return mView;
+            ContentValues assist = Utility.createAssist(mRegistration, mTerm);
+            long assistRowId = ContentUris.parseId(mContentResolver.insert(ClubsContract.AssistEntry.CONTENT_URI, assist));
+            if(assistRowId!=-1){
+                removeFragment(currentFragment);
+                Toast.makeText(getActivity(), "Assist added to " + mAccount + ".", Toast.LENGTH_SHORT).show();
+                account.setText("");
+            }
+        }
+        ;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -200,14 +234,14 @@ public class DetailAssistFragment extends Fragment implements LoaderManager.Load
         String tAccount = getAccount();
         Uri query = ClubsContract.UserEntry.builUserUriWithAccount(tAccount);
         userId=-1;
-
-        if(currentFragment!=null)fm.beginTransaction().remove(currentFragment).commit();
+        toRegister = false;
+        removeFragment(currentFragment);
        // Log.d(LOG_TAG,"Query for user "+tAccount);
         //Toast.makeText(getActivity(),"Query for user "+tAccount,Toast.LENGTH_SHORT).show();
         return new CursorLoader(getActivity(), query, null, null, null, null);
     }
     private Fragment currentFragment;
-private int mRegistration;
+private long mRegistration;
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data.getCount() < 1 ) {
@@ -226,7 +260,8 @@ private int mRegistration;
 
 
             FragmentTransaction ft = fm.beginTransaction();
-            fm.beginTransaction();
+            //fm.beginTransaction();
+            ft.setCustomAnimations(R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_bottom);
             ft.replace(R.id.fragment_detail_usercontainer, fragToLoad);
 
             ft.commit();
@@ -235,6 +270,7 @@ private int mRegistration;
         }else {
             //TODO: Something if user exists but isn't registered
             Toast.makeText(getActivity(),userId+" is not in club "+mClub,Toast.LENGTH_SHORT).show();
+            toRegister = true;
 
         }
 

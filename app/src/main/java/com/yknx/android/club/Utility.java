@@ -152,6 +152,13 @@ public class Utility {
         return testValues;
     }
 
+    public static void setHeader(View rootView, long clubId, Context mContext){
+        setHeader(rootView,mContext.getContentResolver().query(ClubsContract.ClubEntry.buildClubUri(clubId),null,null,null,null),mContext);
+    }
+    public static void setHeader(View rootView, Cursor cursor, Context mContext){
+        setHeader(rootView,0,cursor,mContext);
+
+    }
     public static void setHeader(View rootView, int position, Cursor cursor, Context mContext){
         if (!cursor.moveToPosition(position)) return;
         String icon_uri = cursor.getString(cursor.getColumnIndex(ClubsContract.ClubEntry.COLUMN_CLUB_ICON_URI));
@@ -175,11 +182,12 @@ public class Utility {
         String term = mContext.getString(R.string.format_terms, mRandom.nextInt(termps) + 1);
 
 
-        nameView.setText(name);
-        usersView.setText(users);
-        termView.setText(term);
+       if(nameView!=null) nameView.setText(name);
+       if(usersView!=null) usersView.setText(users);
+        if(termView!=null) termView.setText(term);
 
         String color = cursor.getString(cursor.getColumnIndex(ClubsContract.ClubEntry.COLUMN_CLUB_COLOR));
+        if(header==null || headerIcon==null) return;
         header.setBackgroundColor(Color.parseColor(color));
 
         if (icon_uri == null || icon_uri.equals("")) {

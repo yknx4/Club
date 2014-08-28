@@ -1,6 +1,8 @@
 package com.yknx.android.club.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -11,9 +13,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.yknx.android.club.R;
+import com.yknx.android.club.data.ClubsProvider;
 import com.yknx.android.club.fragments.DetailAssistFragment;
 import com.yknx.android.club.fragments.NavigationDrawerFragment;
 import com.yknx.android.club.fragments.UtilityUserAssistsFragment;
+import com.yknx.android.club.model.Club;
 
 
 public class ClubDetails extends ActionBarActivity
@@ -29,6 +33,7 @@ public class ClubDetails extends ActionBarActivity
      */
     private CharSequence mTitle;
     private long mClub = 0;
+    private Club cClub;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,25 +42,28 @@ public class ClubDetails extends ActionBarActivity
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
-        Intent opt = getIntent();
-        if(opt !=null){
-            mClub = opt.getLongExtra(DetailAssistFragment.ARG_CLUB,0);
-        }
+
+        setClubFromIntent();
+        cClub = ClubsProvider.getClub(this, mClub);
+        setTitle(cClub.name);
+        mNavigationDrawerFragment.setClub(mClub);
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
     }
-
+    private void setClubFromIntent(){
+        Intent opt = getIntent();
+        if(opt !=null){
+            mClub = opt.getLongExtra(DetailAssistFragment.ARG_CLUB,0);
+        }
+    }
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
 
-        if(getIntent() !=null){
-            mClub = getIntent().getLongExtra(DetailAssistFragment.ARG_CLUB,0);
-        }
+        setClubFromIntent();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, DetailAssistFragment.newInstance("",mClub))
@@ -80,7 +88,11 @@ public class ClubDetails extends ActionBarActivity
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
+        if(cClub!=null){
+            actionBar.setTitle(cClub.name);
+            actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(cClub.color)));
+        }
+
     }
 
 

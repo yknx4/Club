@@ -46,7 +46,7 @@ public class UtilityUserAssistsFragment extends Fragment implements LoaderManage
     private long mUserId;
     private User mResult;
     private long mClub;
-    private int mRegId;
+    private long mRegId;
     private View mCurrentView;
 
     private SimpleCursorAdapter assistDataAdapter = null;
@@ -62,12 +62,12 @@ public class UtilityUserAssistsFragment extends Fragment implements LoaderManage
      * @return A new instance of fragment UtilityUserViewFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static UtilityUserAssistsFragment newInstance(int regId,long userId, long clubId) {
+    public static UtilityUserAssistsFragment newInstance(long regId,long userId, long clubId) {
         UtilityUserAssistsFragment fragment = new UtilityUserAssistsFragment();
         Bundle args = new Bundle();
         args.putLong(ARG_USERID, userId);
         args.putLong(ARG_CLUBID,clubId);
-        args.putInt(ARG_REGID, regId);
+        args.putLong(ARG_REGID, regId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -87,7 +87,7 @@ public class UtilityUserAssistsFragment extends Fragment implements LoaderManage
         if (getArguments() != null) {
             mUserId = getArguments().getLong(ARG_USERID);
             mClub = getArguments().getLong(ARG_CLUBID);
-            mRegId = getArguments().getInt(ARG_REGID);
+            mRegId = getArguments().getLong(ARG_REGID);
         }
         getLoaderManager().initLoader(ULOADER_ID,null,this);
 
@@ -145,7 +145,7 @@ public class UtilityUserAssistsFragment extends Fragment implements LoaderManage
             String name = data.getString(data.getColumnIndex(ClubsContract.UserEntry.COLUMN_USER_NAME));
             nameView.setText(name);
             GetAssistsTask tsk = new GetAssistsTask();
-            tsk.execute(mRegId,0);
+            tsk.execute(mRegId,0L);
 
 
 
@@ -174,9 +174,9 @@ public class UtilityUserAssistsFragment extends Fragment implements LoaderManage
         public void onFragmentInteraction(Uri uri);
     }
 
-    private class GetAssistsTask extends AsyncTask<Integer,Integer,Cursor>{
+    private class GetAssistsTask extends AsyncTask<Long,Integer,Cursor>{
 
-        private int mRedId;
+        private long mRedId;
         private int mTerm;
         @Override
         protected void onPostExecute(Cursor cursor) {
@@ -224,12 +224,12 @@ public class UtilityUserAssistsFragment extends Fragment implements LoaderManage
         }
 
         @Override
-        protected Cursor doInBackground(Integer... integers) {
+        protected Cursor doInBackground(Long... integers) {
             if(integers.length<2)
             return null;
 
             mRegId = integers[0];
-            mTerm = integers[1];
+            mTerm = integers[1].intValue();
             //Uri query = ClubsContract.AssistEntry.buildAssistUriWithRegistrationAndTerm(mRegId,mTerm);
             Uri query = ClubsContract.AssistEntry.buildAssistUriWithRegistration(mRegId);
 
