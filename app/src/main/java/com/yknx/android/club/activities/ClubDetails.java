@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import com.yknx.android.club.R;
 import com.yknx.android.club.data.ClubsProvider;
 import com.yknx.android.club.fragments.DetailAssistFragment;
+import com.yknx.android.club.fragments.DetailRegisterFragment;
 import com.yknx.android.club.fragments.NavigationDrawerFragment;
 import com.yknx.android.club.fragments.UtilityUserAssistsFragment;
 import com.yknx.android.club.model.Club;
@@ -62,12 +63,23 @@ public class ClubDetails extends ActionBarActivity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
-
-        setClubFromIntent();
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, DetailAssistFragment.newInstance("",mClub))
-                .commit();
+        setClubFromIntent();
+        switch(position){
+            case 0:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, DetailAssistFragment.newInstance("",mClub))
+                        .commit();
+                break;
+            case 1:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, DetailRegisterFragment.newInstance("", ""))
+                        .commit();
+                break;
+
+        }
+
+
     }
 
     public void onSectionAttached(int number) {
