@@ -7,5 +7,6 @@
     <dimen name="fragment_club_select_header_paddingTop">16dp</dimen>
     <dimen name="navigation_drawer_width">240dp</dimen>
     <dimen name="_0_dimen">0dp</dimen>
-
+    <dimen name="start_z">5dp</dimen>
+    <dimen name="end_z">15dp</dimen>
 </resources>

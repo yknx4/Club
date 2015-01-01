@@ -1,14 +1,17 @@
 package com.yknx.android.club.activities;
 
+
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
+
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -16,18 +19,18 @@ import com.yknx.android.club.R;
 import com.yknx.android.club.data.ClubsProvider;
 import com.yknx.android.club.fragments.DetailAssistFragment;
 import com.yknx.android.club.fragments.DetailRegisterFragment;
-import com.yknx.android.club.fragments.NavigationDrawerFragment;
+import com.yknx.android.club.fragments.NavigationDrawerFragmentDW;
 import com.yknx.android.club.fragments.UtilityUserAssistsFragment;
 import com.yknx.android.club.model.Club;
 
 
 public class ClubDetails extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, DetailAssistFragment.OnFragmentInteractionListener, UtilityUserAssistsFragment.OnFragmentInteractionListener {
+        implements NavigationDrawerFragmentDW.NavigationDrawerCallbacks, DetailAssistFragment.OnFragmentInteractionListener, UtilityUserAssistsFragment.OnFragmentInteractionListener {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
-    private NavigationDrawerFragment mNavigationDrawerFragment;
+    private NavigationDrawerFragmentDW mNavigationDrawerFragmentDW;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -40,19 +43,24 @@ public class ClubDetails extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_club_details);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
+        setSupportActionBar(toolbar);
 
-        mNavigationDrawerFragment = (NavigationDrawerFragment)
-                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+
+        mNavigationDrawerFragmentDW = (NavigationDrawerFragmentDW) getFragmentManager().findFragmentById(R.id.navigation_drawer);
 
         setClubFromIntent();
         cClub = ClubsProvider.getClub(this, mClub);
         setTitle(cClub.name);
-        mNavigationDrawerFragment.setClub(mClub);
+        mNavigationDrawerFragmentDW.setClub(mClub);
 
         // Set up the drawer.
-        mNavigationDrawerFragment.setUp(
+        mNavigationDrawerFragmentDW.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+
+
     }
     private void setClubFromIntent(){
         Intent opt = getIntent();
@@ -63,7 +71,7 @@ public class ClubDetails extends ActionBarActivity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentManager fragmentManager = getFragmentManager();
         setClubFromIntent();
         switch(position){
             case 0:
@@ -97,8 +105,10 @@ public class ClubDetails extends ActionBarActivity
     }
 
     public void restoreActionBar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
+        setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        //actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         if(cClub!=null){
             actionBar.setTitle(cClub.name);
@@ -110,7 +120,7 @@ public class ClubDetails extends ActionBarActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mNavigationDrawerFragment.isDrawerOpen()) {
+        if (!mNavigationDrawerFragmentDW.isDrawerOpen()) {
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.

@@ -40,7 +40,7 @@
                     android:layout_height="100dp"
                     android:id="@+id/fragmen_save_create_icon_imageview"
                     android:src="@drawable/default_icon"
-                    style="@style/Widget.AppCompat.Light.Base.Spinner"
+
      />
 
             </LinearLayout>

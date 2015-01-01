@@ -1,18 +1,20 @@
 package com.yknx.android.club.fragments;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
+import android.app.LoaderManager;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.CursorLoader;
+import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
+
+
+
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -93,7 +95,7 @@ public class DetailAssistFragment extends Fragment implements LoaderManager.Load
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         fm = getChildFragmentManager();
-        mLoaderManager = getActivity().getSupportLoaderManager();
+        mLoaderManager = getActivity().getLoaderManager();
         if (getArguments() != null) {
             mAccount = getArguments().getString(ARG_ACCOUNT);
             mClub = getArguments().getLong(ARG_CLUB);
@@ -101,8 +103,8 @@ public class DetailAssistFragment extends Fragment implements LoaderManager.Load
             mLoaderManager.initLoader(LOADER_ID, null, this);
         }
         if(savedInstanceState!=null) {
-            FragmentManager fm = getChildFragmentManager();
-            FragmentTransaction ft = fm.beginTransaction();
+            android.app.FragmentManager fm = getChildFragmentManager();
+            android.app.FragmentTransaction ft = fm.beginTransaction();
 
             //fm.beginTransaction();
             ft.setCustomAnimations(R.anim.abc_slide_in_bottom,R.anim.abc_slide_out_bottom);
@@ -228,7 +230,7 @@ public class DetailAssistFragment extends Fragment implements LoaderManager.Load
         super.onDetach();
         mListener = null;
     }
-    FragmentManager fm ;
+    android.app.FragmentManager fm ;
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String tAccount = getAccount();
@@ -240,6 +242,9 @@ public class DetailAssistFragment extends Fragment implements LoaderManager.Load
         //Toast.makeText(getActivity(),"Query for user "+tAccount,Toast.LENGTH_SHORT).show();
         return new CursorLoader(getActivity(), query, null, null, null, null);
     }
+
+
+
     private Fragment currentFragment;
 private long mRegistration;
     @Override
@@ -261,7 +266,7 @@ private long mRegistration;
 
             FragmentTransaction ft = fm.beginTransaction();
             //fm.beginTransaction();
-            ft.setCustomAnimations(R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_bottom);
+            //ft.setCustomAnimations(R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_bottom);
             ft.replace(R.id.fragment_detail_usercontainer, fragToLoad);
 
             ft.commit();

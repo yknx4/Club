@@ -2,20 +2,33 @@
 <resources>
     <!-- the theme applied to the application or activity -->
     <style name="ClubSelectActionBarTheme"
-        parent="@style/Theme.AppCompat.Light">
+        parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
-        <item name="android:actionBarStyle">@style/HeaderlessActionBar</item>
-
-        <!-- Support library compatibility -->
-        <item name="actionBarStyle">@style/HeaderlessActionBar</item>
     </style>
+
+    <!-- Base application theme. -->
+
+
+
+    <style name="AppTheme" parent="AppTheme.Base"/>
+
+    <style name="AppTheme.Base" parent="Theme.AppCompat">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+
+    </style>
+
+
 
     <!-- ActionBar styles -->
     <style name="HeaderlessActionBar"
         parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@color/club_default</item>
-        <item name="android:displayOptions"></item>
+
 
         <!-- Support library compatibility --><item name="background">@color/club_default</item>
     </style>

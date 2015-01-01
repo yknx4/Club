@@ -1,11 +1,15 @@
 package com.yknx.android.club;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -186,13 +190,37 @@ public class Utility {
        if(usersView!=null) usersView.setText(users);
         if(termView!=null) termView.setText(term);
 
-        String color = cursor.getString(cursor.getColumnIndex(ClubsContract.ClubEntry.COLUMN_CLUB_COLOR));
+        int color = Color.parseColor(cursor.getString(cursor.getColumnIndex(ClubsContract.ClubEntry.COLUMN_CLUB_COLOR)));
         if(header==null || headerIcon==null) return;
-        header.setBackgroundColor(Color.parseColor(color));
+        header.setBackgroundColor(color);
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ){
+            int darkerColor = darker(color,.8F);
+            Window window = ((Activity) mContext).getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(darkerColor);
+        }
+
 
         if (icon_uri == null || icon_uri.equals("")) {
             //headerIcon.setImageResource(R.drawable.ic_action_about);
             headerIcon.setImageBitmap(null);
         } else headerIcon.setImageURI(Uri.parse(icon_uri));
+    }
+
+    /**
+     * Returns darker version of specified <code>color</code>.
+     */
+    public static int darker (int color, float factor) {
+        int a = Color.alpha( color );
+        int r = Color.red( color );
+        int g = Color.green( color );
+        int b = Color.blue( color );
+
+        return Color.argb( a,
+                Math.max( (int)(r * factor), 0 ),
+                Math.max( (int)(g * factor), 0 ),
+                Math.max( (int)(b * factor), 0 ) );
     }
 }

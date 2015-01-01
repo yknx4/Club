@@ -30,10 +30,14 @@
             android:parentActivityName=".activities.ClubSelect" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.yknx.android.club.ClubSelect" />
+                android:value="com.yknx.android.club.activities.ClubSelect" />
         </activity>
         <activity
             android:name=".activities.ClubDetails"
+            android:label="@string/title_activity_club_details">
+        </activity>
+        <activity
+            android:name=".activities.ClubDataActivity"
             android:label="@string/title_activity_club_details">
         </activity>
     </application>

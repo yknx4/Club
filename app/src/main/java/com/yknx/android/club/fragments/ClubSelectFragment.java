@@ -1,5 +1,6 @@
 package com.yknx.android.club.fragments;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -7,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -39,8 +42,11 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
     private int mListViewPosition = ListView.INVALID_POSITION;
     private ListView listView;
     private View mainView;
+    private Cursor mainData;
+    ImageButton openClubButton;
 
     public ClubSelectFragment() {
+
     }
 
     @Override
@@ -53,21 +59,28 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if (data.getCount() == 0) {
-            //TODO: Add handler when Data = 0
-        }
-        mClubAdapter.swapCursor(data);
 
-        if (mListViewPosition != ListView.INVALID_POSITION) {
-            listView.setSelection(mListViewPosition);
-            setHeader(mainView, mListViewPosition);
+        mainData = data;
+        mClubAdapter.swapCursor(data);
+        if (data.getCount() == 0) {
+            openClubButton.setVisibility(View.INVISIBLE);
+            //TODO: Add handler when Data = 0
+        } else {
+            if (mListViewPosition != ListView.INVALID_POSITION) {
+                listView.setSelection(mListViewPosition);
+                setHeader(mainView, mListViewPosition);
+
+            }
         }
+
 
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+
         mClubAdapter.swapCursor(null);
+        mainData.close();
     }
 
     @Override
@@ -76,6 +89,20 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
         if (mListViewPosition != ListView.INVALID_POSITION) {
             outState.putInt(LISTVIEW_POSITION, mListViewPosition);
         }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(!mainData.isClosed()) mainData.close();
+
     }
 
     @Override
@@ -102,14 +129,15 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
         );
     }
 
-    private Cursor getCurrentCursorAtPosition(int position){
-        if (mClubAdapter== null)return null;
+    private Cursor getCurrentCursorAtPosition(int position) {
+        if (mClubAdapter == null) return null;
         Cursor data = mClubAdapter.getCursor();
         data.moveToPosition(position);
         return data;
     }
-    private long getCurrentClubID(){
-        if (mClubAdapter== null)return ListView.INVALID_POSITION;
+
+    private long getCurrentClubID() {
+        if (mClubAdapter == null) return ListView.INVALID_POSITION;
         Cursor data = getCurrentCursorAtPosition(mListViewPosition);
 
         return data.getLong(data.getColumnIndex(ClubsContract.ClubEntry._ID));
@@ -120,7 +148,6 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
                              Bundle savedInstanceState) {
         if (savedInstanceState != null && savedInstanceState.containsKey(LISTVIEW_POSITION))
             mListViewPosition = savedInstanceState.getInt(LISTVIEW_POSITION);
-
 
 
         final View rootView = inflater.inflate(R.layout.fragment_club_select, container, false);
@@ -160,19 +187,29 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
             }
         });
 
-        final ImageButton openClubButton = (ImageButton) rootView.findViewById(R.id.imagebutton_openclub);
+        openClubButton = (ImageButton) rootView.findViewById(R.id.imagebutton_openclub);
 
 
         openClubButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent openClubDetails = new Intent(getActivity(), ClubDetails.class);
+
+                Activity currentActivity = getActivity();
+
+
+                Intent openClubDetails = new Intent(currentActivity, ClubDetails.class);
                 openClubDetails.putExtra(DetailAssistFragment.ARG_CLUB, getCurrentClubID());
-                startActivity(openClubDetails);
+                //startActivity(openClubDetails);
+
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        currentActivity, view, "test");
+
+               ActivityCompat.startActivity(currentActivity, openClubDetails,options.toBundle());
+
             }
         });
 
-        if(mListViewPosition==ListView.INVALID_POSITION){
+        if (mListViewPosition == ListView.INVALID_POSITION) {
             openClubButton.setEnabled(false);
         }
 
@@ -193,6 +230,9 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
 
         if (savedInstanceState != null && savedInstanceState.containsKey(LISTVIEW_POSITION)) {
             mListViewPosition = savedInstanceState.getInt(LISTVIEW_POSITION);
+
+        } else {
+            mListViewPosition = 0;
         }
         mainView = rootView;
         return rootView;

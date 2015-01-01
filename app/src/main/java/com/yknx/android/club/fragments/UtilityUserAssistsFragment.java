@@ -1,19 +1,20 @@
 package com.yknx.android.club.fragments;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.LoaderManager;
+import android.content.CursorLoader;
+import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v4.widget.SimpleCursorAdapter;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import com.yknx.android.club.R;
@@ -133,6 +134,8 @@ public class UtilityUserAssistsFragment extends Fragment implements LoaderManage
         Uri query = ClubsContract.UserEntry.buildUserUri(mUserId);
         return new CursorLoader(getActivity(), query, null, null, null, null);
     }
+
+
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {

@@ -40,7 +40,7 @@
                 android:id="@+id/fragment_club_select_club_icon"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/art_placeholder"
+                tools:src="@drawable/art_placeholder"
 
                 />
 
@@ -60,7 +60,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed"
-                android:text="1st Term"
+                tools:text="1st Term"
+                android:text="Choose a"
                 android:textColor="@android:color/primary_text_dark"
                 android:textSize="22sp" />
 
@@ -69,7 +70,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed"
-                android:text="MyClub"
+                tools:text="MyClub"
+                android:text="Club"
                 android:textColor="@android:color/primary_text_dark"
                 android:textSize="48sp" />
 
@@ -78,7 +80,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-light"
-                android:text="Users: 999"
+                tools:text="Users: 999"
                 android:textColor="@android:color/primary_text_dark"
 
                 android:textSize="28sp" />
@@ -140,10 +142,11 @@
 
             <ImageButton
                 android:id="@+id/imagebutton_openclub"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_action_forward" />
+                android:src="@drawable/ic_action_forward"
+
+                tools:visibility="visible"
+                style="@style/FloatingActionButtonLight"
+                />
         </LinearLayout>
     </LinearLayout>
 
