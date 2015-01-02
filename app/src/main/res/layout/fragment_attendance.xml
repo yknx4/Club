@@ -1,42 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
 
-    android:layout_height="fill_parent">
+    android:layout_height="wrap_content">
 
     <FrameLayout
     android:id="@+id/top_container"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-        tools:layout_height="fill_parent"
-    android:layout_alignParentTop="true"
+    android:layout_height="0px"
+        android:layout_weight="1"
+        tools:minHeight="480dp"
+
         tools:background="@color/light_gray"
         />
 
-    <LinearLayout
+    <android.support.v7.widget.CardView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical">
 
-        <EditText
-            android:layout_width="fill_parent"
+        >
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+            android:id="@+id/digits_container"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
+            android:layout_marginTop="@dimen/dialpad_vertical_margin"
+            android:layout_marginBottom="@dimen/dialpad_vertical_margin"
             android:gravity="center"
-            android:inputType="number"
-            android:minHeight="@dimen/default_min_height"
-            tools:text="20094894"
+
+            android:orientation="vertical">
+            <!--android:layout_weight="@integer/dialpad_layout_weight_digits"-->
+
+            <EditText
+
+                android:id="@+id/digits"
+                android:layout_width="fill_parent"
+
+                android:inputType="number"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/default_min_height"
+                android:gravity="center"
+                android:scrollHorizontally="true"
+                android:textAppearance="@style/DialtactsDigitsTextAppearance"
+                android:focusableInTouchMode="true"
+                android:paddingTop="@dimen/digits_min_height"
+                android:paddingBottom="@dimen/digits_min_height"
+                android:background="@null"
+                 />
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@color/light_gray"/>
+                <!--android:nextFocusRight="@+id/deleteButton"-->
 
 
-            />
+        </LinearLayout>
+
+
+
         <FrameLayout
             android:id="@+id/bottom_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/material_blue_grey_900"
+            android:minHeight="12dp"
              />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
 
-    </LinearLayout>
-
-</RelativeLayout>
+</LinearLayout>

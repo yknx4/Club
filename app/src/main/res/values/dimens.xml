@@ -10,6 +10,10 @@
     <dimen name="start_z">5dp</dimen>
     <dimen name="end_z">15dp</dimen>
     <dimen name="default_min_height">48dp</dimen>
+    <dimen name="digits_min_height">12dp</dimen>
+    <dimen name="dialpad_digits_text_size">35sp</dimen>
+    <dimen name="dialpad_horizontal_margin">4dp</dimen>
+    <dimen name="dialpad_vertical_margin">2dp</dimen>
 
 
 
