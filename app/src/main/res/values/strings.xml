@@ -42,4 +42,10 @@ values        <string name="title_activity_club_details">Club Details</string>
     <string name="show_list">Stats</string>
     <string name="assist_title_string">Assists</string>
 
+
+
+
+    <string name="drawer_open">Menu opened</string>
+    <string name="drawer_close">Menu closed</string>
+
 </resources>

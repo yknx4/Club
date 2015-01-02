@@ -7,6 +7,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.widget.Toast;
 
+import com.yknx.android.club.R;
+import com.yknx.android.club.fragments.NavigationDrawerCallbacks;
+import com.yknx.android.club.fragments.NavigationDrawerFragment;
+
 /**
  * Created by Yknx on 01/01/2015.
  */

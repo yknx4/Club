@@ -16,6 +16,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.yknx.android.club.R;
+import com.yknx.android.club.model.NavigationItem;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -136,9 +139,9 @@ public class NavigationDrawerFragment extends android.support.v4.app.Fragment im
 
     public List<NavigationItem> getMenu() {
         List<NavigationItem> items = new ArrayList<NavigationItem>();
-        items.add(new NavigationItem("item 1", getResources().getDrawable(R.drawable.ic_menu_check)));
-        items.add(new NavigationItem("item 2", getResources().getDrawable(R.drawable.ic_menu_check)));
-        items.add(new NavigationItem("item 3", getResources().getDrawable(R.drawable.ic_menu_check)));
+        items.add(new NavigationItem("item 1", getResources().getDrawable(R.drawable.ic_action_forward)));
+        items.add(new NavigationItem("item 2", getResources().getDrawable(R.drawable.ic_action_forward)));
+        items.add(new NavigationItem("item 3", getResources().getDrawable(R.drawable.ic_action_forward)));
         return items;
     }
 

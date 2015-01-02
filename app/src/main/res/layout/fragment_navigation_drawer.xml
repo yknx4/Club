@@ -1,99 +1,14 @@
-
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/fragment_club_select_header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/club_default"
-            android:minHeight="?android:attr/listPreferredItemHeight"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:padding="8dp">
-
-            <!--<LinearLayout
-                android:layout_width="60dp"
-                android:layout_height="match_parent" />-->
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:gravity="left"
-                android:orientation="vertical"
-                android:layout_margin="4dp">
-
-                <TextView
-                    android:id="@+id/fragment_club_select_term_textview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-condensed"
-                    android:text="1st Term"
-                    android:textColor="@android:color/primary_text_dark"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/fragment_club_select_title_textview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-condensed"
-                    android:text="MyClub"
-                    android:textColor="@android:color/primary_text_dark"
-                    android:textSize="40sp" />
-
-                <TextView
-                    android:id="@+id/fragment_club_select_users_textview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-light"
-                    android:text="Users: 999"
-                    android:textColor="@android:color/primary_text_dark"
-
-                    android:textSize="22sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical|center_horizontal"
-                android:orientation="vertical"
-                android:id="@+id/linearLayout">
-
-                <ImageView
-                    android:id="@+id/fragment_club_select_club_icon"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:src="@drawable/art_placeholder"
-                    android:layout_marginLeft="12dp" />
-            </LinearLayout>
-
-
-        </LinearLayout>
-
-        <ListView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:choiceMode="singleChoice"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="0dp"
-        android:background="#ffffffff"
-            android:id="@+id/fragment_details_navdrawer"
-        tools:context="com.yknx.android.club.fragments.NavigationDrawerFragmentDW" />
-
-        <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:choiceMode="singleChoice"
-            android:divider="@android:color/transparent"
-            android:padding="8dp"
-            android:dividerHeight="0dp"
-            android:background="@color/light_gray"
-            android:id="@+id/fragment_details_secundarydrawer" />
-    </LinearLayout>
-
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.RecyclerView
+    android:id="@+id/drawerList"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:clickable="true"
+    android:focusableInTouchMode="true"
+    android:scrollbars="vertical"
+    android:focusable="true"
+    android:layout_height="match_parent"
+    android:background="@color/myDrawerBackground"
+    tools:visibility="gone"
+    />

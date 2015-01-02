@@ -23,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
+import com.yknx.android.club.activities.ClubDataActivity;
 import com.yknx.android.club.adapters.ClubAdapter;
 import com.yknx.android.club.activities.ClubDetails;
 import com.yknx.android.club.R;
@@ -197,7 +198,7 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
                 Activity currentActivity = getActivity();
 
 
-                Intent openClubDetails = new Intent(currentActivity, ClubDetails.class);
+                Intent openClubDetails = new Intent(currentActivity, ClubDataActivity.class);
                 openClubDetails.putExtra(DetailAssistFragment.ARG_CLUB, getCurrentClubID());
                 //startActivity(openClubDetails);
 

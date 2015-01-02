@@ -101,7 +101,7 @@ public class NavigationDrawerFragmentDW extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         mDrawerListView = inflater.inflate(
-                R.layout.fragment_navigation_drawer, container, false);
+                R.layout.fragment_navigation_drawerdw, container, false);
         opts = (ListView) mDrawerListView.findViewById(R.id.fragment_details_navdrawer);
         opts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
