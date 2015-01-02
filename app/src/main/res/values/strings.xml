@@ -47,5 +47,7 @@ values        <string name="title_activity_club_details">Club Details</string>
 
     <string name="drawer_open">Menu opened</string>
     <string name="drawer_close">Menu closed</string>
+    <string name="NavItemAttendance">Attendance</string>
+    <string name="NavItemUsers">Users</string>
 
 </resources>

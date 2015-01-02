@@ -1,5 +1,7 @@
 package com.yknx.android.club.activities;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -7,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.widget.Toast;
 
+import com.yknx.android.club.DummyFragmentFragment;
 import com.yknx.android.club.R;
 import com.yknx.android.club.fragments.NavigationDrawerCallbacks;
 import com.yknx.android.club.fragments.NavigationDrawerFragment;
@@ -38,6 +41,18 @@ public class ClubDataActivity extends ActionBarActivity implements NavigationDra
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
+
+
+        switch (position){
+            case 0:{
+                FragmentManager fm = getFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.replace(R.id.container, new DummyFragmentFragment());
+
+                ft.commit();
+                break;
+            }
+        }
         Toast.makeText(this, "Menu item selected -> " + position, Toast.LENGTH_SHORT).show();
     }
 

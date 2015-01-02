@@ -265,8 +265,8 @@ private long mRegistration;
 
 
             FragmentTransaction ft = fm.beginTransaction();
-            //fm.beginTransaction();
-            //ft.setCustomAnimations(R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_bottom);
+            fm.beginTransaction();
+            ft.setCustomAnimations(R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_bottom);
             ft.replace(R.id.fragment_detail_usercontainer, fragToLoad);
 
             ft.commit();

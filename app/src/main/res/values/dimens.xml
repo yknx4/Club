@@ -9,6 +9,7 @@
     <dimen name="_0_dimen">0dp</dimen>
     <dimen name="start_z">5dp</dimen>
     <dimen name="end_z">15dp</dimen>
+    <dimen name="default_min_height">48dp</dimen>
 
 
 
