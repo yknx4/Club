@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+
+    android:gravity="center_vertical"
+    android:minHeight="?android:attr/listPreferredItemHeight"
+    android:background="@drawable/touch_selector"
+    >
+
+    <LinearLayout
+        android:layout_width="64sp"
+        android:layout_height="64sp"
+        android:gravity="center"
+        >
+        <ImageView
+            android:layout_width="48sp"
+            android:layout_height="48sp"
+
+            android:id="@+id/user_row_icon"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_action_person"
+            />
+    </LinearLayout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:orientation="vertical" android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_weight="5">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Person Name [7]"
+            android:id="@+id/user_row_name_textview"
+            style="@style/condensed_large" />
+
+
+               <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Account Number"
+                    android:fontFamily="sans-serif-condensed"
+                    android:id="@+id/user_row_account_textview"
+                    android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small" />
+
+
+    </LinearLayout>
+    <ImageButton
+
+        android:id="@+id/user_row_add_button"
+
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:src="@drawable/ic_action_forward"
+        style="?android:attr/borderlessButtonStyle"
+
+        android:contentDescription="@string/ADD_ATTENDANCE" />
+
+
+</LinearLayout>

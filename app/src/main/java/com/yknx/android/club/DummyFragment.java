@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.os.Bundle;
 
 
-public class DummyFragmentFragment extends Fragment {
+public class DummyFragment extends Fragment {
 
 
     @Override

@@ -81,7 +81,7 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
     public void onLoaderReset(Loader<Cursor> loader) {
 
         mClubAdapter.swapCursor(null);
-        mainData.close();
+        if(!mainData.isClosed())mainData.close();
     }
 
     @Override

@@ -132,7 +132,7 @@ public class DetailAssistFragment extends Fragment implements LoaderManager.Load
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View mView =inflater.inflate(R.layout.fragment_detail_assist, container, false);
+        final View mView =inflater.inflate(R.layout.fragment_detail_assist, null, false);
         currentView = mView;
         account =(EditText) currentView.findViewById(R.id.fragment_details_assist_account);
         addAssistButton = (ImageButton) currentView.findViewById(R.id.fragment_detail_assist_addassist);
