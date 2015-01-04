@@ -30,7 +30,7 @@ private static final String LOG_TAG = FragmentUserList.class.getSimpleName();
 
     public void filter(CharSequence cs){
         Log.d(LOG_TAG,"Filtering with: "+cs);
-        mAdapter.getFilter().filter(cs);
+        if(mAdapter!=null)mAdapter.getFilter().filter(cs);
     }
 
     @Override

@@ -202,10 +202,11 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
                 openClubDetails.putExtra(DetailAssistFragment.ARG_CLUB, getCurrentClubID());
                 //startActivity(openClubDetails);
 
-                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        currentActivity, view, "test");
+//                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+//                        currentActivity, view, "test");
 
-               ActivityCompat.startActivity(currentActivity, openClubDetails,options.toBundle());
+               //ActivityCompat.startActivity(currentActivity, openClubDetails,options.toBundle());
+                ActivityCompat.startActivity(currentActivity,openClubDetails,null);
 
             }
         });

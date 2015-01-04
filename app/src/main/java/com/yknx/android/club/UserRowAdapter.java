@@ -95,7 +95,7 @@ public class UserRowAdapter extends RecyclerView.Adapter<UserRowAdapter.ViewHold
                     ClubsContract.UserEntry.COLUMN_USER_NAME + " ASC");
             filterResults.values = userListFromCursor(filteredDataCursor);
             filterResults.count = filteredDataCursor.getCount();
-            Log.d(LOG_TAG, " did filter. ("+filteredDataCursor.getCount()+")");
+            Log.v(LOG_TAG, " did filter. ("+filteredDataCursor.getCount()+")");
             filteredDataCursor.close();
             return filterResults;
         }
@@ -105,7 +105,7 @@ public class UserRowAdapter extends RecyclerView.Adapter<UserRowAdapter.ViewHold
         protected void publishResults(CharSequence contraint, FilterResults results) {
             objects = (List<User>) results.values;
             notifyDataSetChanged();
-            Log.d(LOG_TAG, "Published results.");
+            Log.v(LOG_TAG, "Published results.");
         }
     };
 
