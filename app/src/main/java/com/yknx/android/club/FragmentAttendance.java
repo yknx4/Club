@@ -62,11 +62,8 @@ public class FragmentAttendance extends Fragment {
     private void createUserList() {
         setCardContainerHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         topContainer.setVisibility(View.VISIBLE);
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
         currentUserList = new FragmentUserList();
-        ft.replace(R.id.top_container, currentUserList);
-        ft.commit();
+        Utility.replaceFragment(R.id.top_container,currentUserList,getActivity());
         customTextWatcher.setParent((FragmentUserList) currentUserList);
     }
 
@@ -75,14 +72,9 @@ public class FragmentAttendance extends Fragment {
         setCardContainerHeight(ViewGroup.LayoutParams.MATCH_PARENT);
         Log.d(LOG_TAG, "Deleting user list.");
         customTextWatcher.setParent(null);
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.remove(currentUserList);
-        ft.commitAllowingStateLoss();
+        Utility.deleteFragment(currentUserList,getActivity());
         currentUserList = null;
         Log.d(LOG_TAG, "Fragment destroyed.");
-
-
     }
 
 

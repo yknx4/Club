@@ -1,6 +1,9 @@
 package com.yknx.android.club;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -26,6 +29,20 @@ import java.util.Random;
 public class Utility {
 
 
+    public static void replaceFragment(int id, Fragment fragment, Context source){
+        FragmentManager fm = ((Activity) source).getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(id, fragment);
+        ft.commit();
+    }
+
+
+    public static void deleteFragment(Fragment fragment, Context source){
+        FragmentManager fm = ((Activity) source).getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.remove(fragment);
+        ft.commitAllowingStateLoss();
+    }
     public static ContentValues createClubValues(Club club){
         String fakeName = club.name;
         String fakeColor = club.color;
