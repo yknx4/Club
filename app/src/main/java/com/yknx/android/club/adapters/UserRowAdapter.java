@@ -7,6 +7,7 @@ import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 
 import com.yknx.android.club.R;
 import com.yknx.android.club.Tasks.GetAttendancesTask;
+import com.yknx.android.club.callbacks.UserRowAdapterCallbacks;
 import com.yknx.android.club.controller.UserController;
 import com.yknx.android.club.data.ClubsContract;
 import com.yknx.android.club.data.ClubsProvider;
@@ -28,7 +30,10 @@ import com.yknx.android.club.model.User;
 import com.yknx.android.club.util.Preferences;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 public class UserRowAdapter extends RecyclerView.Adapter<UserRowAdapter.ViewHolder> implements Filterable, LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -36,6 +41,15 @@ public class UserRowAdapter extends RecyclerView.Adapter<UserRowAdapter.ViewHold
     private final int LOADER_USERS = 1;
     private List<User> objects = new ArrayList<>();
 
+    public UserRowAdapterCallbacks getUserRowAdapterCallbacks() {
+        return userRowAdapterCallbacks;
+    }
+
+    public void setUserRowAdapterCallbacks(UserRowAdapterCallbacks userRowAdapterCallbacks) {
+        this.userRowAdapterCallbacks = userRowAdapterCallbacks;
+    }
+
+    private UserRowAdapterCallbacks userRowAdapterCallbacks;
 
     private Context context;
     private LayoutInflater layoutInflater;
@@ -66,7 +80,7 @@ public class UserRowAdapter extends RecyclerView.Adapter<UserRowAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        initializeViews(objects.get(position), holder);
+        initializeViews(objects.get(position), holder, position);
     }
 
     @Override
@@ -80,7 +94,24 @@ public class UserRowAdapter extends RecyclerView.Adapter<UserRowAdapter.ViewHold
     }
 
 
-    private void initializeViews(User object, final ViewHolder holder) {
+    private void initializeViews(final User object, final ViewHolder holder, final int position) {
+        holder.view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(userRowAdapterCallbacks!=null){
+                    userRowAdapterCallbacks.onUserClick(object,position);
+                }
+            }
+        });
+        holder.userRowAddButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(userRowAdapterCallbacks!=null){
+                    userRowAdapterCallbacks.onAttendanceAdd(object.getId());
+                }
+            }
+        });
+        holder.userId = object.getId();
         holder.userRowAccountTextview.setText(object.getAccount());
         holder.userRowNameTextview.setText(object.getName());
         if (mClub == null) {
@@ -176,27 +207,38 @@ public class UserRowAdapter extends RecyclerView.Adapter<UserRowAdapter.ViewHold
     }
 
 
-    protected class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private ImageView userRowIcon;
-        private TextView userRowNameTextview;
-        private TextView userRowAccountTextview;
-        private TextView userRowAttendanceTextview;
-        private ImageButton userRowAddButton;
+
+
+
+    protected class ViewHolder extends RecyclerView.ViewHolder  {
+        private final View view;
+        private final ImageView userRowIcon;
+        private final TextView userRowNameTextview;
+        private final TextView userRowAccountTextview;
+        private final TextView userRowAttendanceTextview;
+        private final ImageButton userRowAddButton;
+
+        public Long getUserId() {
+            return userId;
+        }
+
+        public void setUserId(Long userId) {
+            this.userId = userId;
+        }
+
+        private Long userId;
 
         public ViewHolder(View v) {
             super(v);
+            view = v;
             userRowIcon = (ImageView) v.findViewById(R.id.user_row_icon);
             userRowNameTextview = (TextView) v.findViewById(R.id.user_row_name_textview);
             userRowAccountTextview = (TextView) v.findViewById(R.id.user_row_account_textview);
             userRowAttendanceTextview = (TextView) v.findViewById(R.id.user_row_attendances_textview);
             userRowAddButton = (ImageButton) v.findViewById(R.id.user_row_add_button);
-            v.setOnClickListener(this);
 
         }
 
-        @Override
-        public void onClick(View v) {
 
-        }
     }
 }

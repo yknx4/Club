@@ -13,16 +13,19 @@ import android.support.v7.widget.RecyclerView;
 
 import com.yknx.android.club.R;
 import com.yknx.android.club.adapters.UserRowAdapter;
+import com.yknx.android.club.callbacks.UserRowAdapterCallbacks;
 import com.yknx.android.club.model.Club;
+import com.yknx.android.club.model.User;
 import com.yknx.android.club.util.DividerItemDecoration;
 
-public class FragmentUserList extends Fragment {
+public class FragmentUserList extends Fragment implements UserRowAdapterCallbacks{
 
 private static final String LOG_TAG = FragmentUserList.class.getSimpleName();
 
     private RecyclerView userRecyclerview;
     private UserRowAdapter mAdapter;
     private Club mClub;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,8 +56,21 @@ private static final String LOG_TAG = FragmentUserList.class.getSimpleName();
 
 
         mAdapter = new UserRowAdapter(getActivity(),mClub);
+        mAdapter.setUserRowAdapterCallbacks(this);
         userRecyclerview.setAdapter(mAdapter);
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mAdapter.setUserRowAdapterCallbacks(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mAdapter.setUserRowAdapterCallbacks(null);
     }
 
     public void setClub(Club club) {
@@ -62,11 +78,15 @@ private static final String LOG_TAG = FragmentUserList.class.getSimpleName();
         this.mClub = club;
     }
 
-    public Club getmClub() {
-        return mClub;
+
+
+    @Override
+    public void onUserClick(User user,int position) {
+        Log.d(LOG_TAG,"Click on "+user.getName()+" on position "+position+".");
     }
 
-    public void setmClub(Club mClub) {
-        this.mClub = mClub;
+    @Override
+    public void onAttendanceAdd(Long userId) {
+        Log.d(LOG_TAG,"Attendance added to "+userId+" on club "+mClub.name+".");
     }
 }
