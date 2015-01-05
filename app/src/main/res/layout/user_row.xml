@@ -32,12 +32,27 @@
         android:gravity="center_vertical"
         android:layout_weight="5">
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Person Name [7]"
-            android:id="@+id/user_row_name_textview"
-            style="@style/condensed_large" />
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Person Name"
+                android:id="@+id/user_row_name_textview"
+                style="@style/condensed_large" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9"
+                android:paddingLeft="8dp"
+                android:fontFamily="sans-serif-condensed"
+                android:id="@+id/user_row_attendances_textview"
+                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
+            </LinearLayout>
+
 
 
                <TextView

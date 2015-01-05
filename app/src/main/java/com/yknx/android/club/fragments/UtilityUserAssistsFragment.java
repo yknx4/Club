@@ -3,6 +3,7 @@ package com.yknx.android.club.fragments;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.LoaderManager;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
@@ -18,6 +19,7 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import com.yknx.android.club.R;
+import com.yknx.android.club.Tasks.GetAttendancesTask;
 import com.yknx.android.club.data.ClubsContract;
 import com.yknx.android.club.model.User;
 
@@ -147,8 +149,8 @@ public class UtilityUserAssistsFragment extends Fragment implements LoaderManage
             TextView nameView = (TextView) mCurrentView.findViewById(R.id.userview_name_textview);
             String name = data.getString(data.getColumnIndex(ClubsContract.UserEntry.COLUMN_USER_NAME));
             nameView.setText(name);
-            GetAssistsTask tsk = new GetAssistsTask();
-            tsk.execute(mRegId,0L);
+            GetAssistsTask tsk = new GetAssistsTask(getActivity(),mRegId,0);
+            tsk.execute();
 
 
 
@@ -177,10 +179,13 @@ public class UtilityUserAssistsFragment extends Fragment implements LoaderManage
         public void onFragmentInteraction(Uri uri);
     }
 
-    private class GetAssistsTask extends AsyncTask<Long,Integer,Cursor>{
+    private class GetAssistsTask extends GetAttendancesTask{
 
-        private long mRedId;
-        private int mTerm;
+
+        public GetAssistsTask(Context context, long mRegistrationId, int mTerm) {
+            super(context, mRegistrationId, mTerm);
+        }
+
         @Override
         protected void onPostExecute(Cursor cursor) {
             super.onPostExecute(cursor);
@@ -226,19 +231,9 @@ public class UtilityUserAssistsFragment extends Fragment implements LoaderManage
             assistListView.setAdapter(assistDataAdapter);
         }
 
-        @Override
-        protected Cursor doInBackground(Long... integers) {
-            if(integers.length<2)
-            return null;
 
-            mRegId = integers[0];
-            mTerm = integers[1].intValue();
-            //Uri query = ClubsContract.AssistEntry.buildAssistUriWithRegistrationAndTerm(mRegId,mTerm);
-            Uri query = ClubsContract.AssistEntry.buildAssistUriWithRegistration(mRegId);
-
-            return getActivity().getContentResolver().query(query,null,null,null,null);
-
-        }
     }
+
+
 
 }

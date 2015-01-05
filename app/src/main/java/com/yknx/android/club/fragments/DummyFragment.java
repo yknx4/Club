@@ -1,4 +1,4 @@
-package com.yknx.android.club;
+package com.yknx.android.club.fragments;
 
 
 import android.app.Fragment;
@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.os.Bundle;
+
+import com.yknx.android.club.R;
 
 
 public class DummyFragment extends Fragment {

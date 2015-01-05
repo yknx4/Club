@@ -1,11 +1,9 @@
-package com.yknx.android.club;
+package com.yknx.android.club.adapters;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.Context;
 import android.content.CursorLoader;
@@ -19,14 +17,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.CursorAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.yknx.android.club.R;
 import com.yknx.android.club.controller.UserController;
 import com.yknx.android.club.data.ClubsContract;
 import com.yknx.android.club.model.User;
@@ -158,6 +155,7 @@ public class UserRowAdapter extends RecyclerView.Adapter<UserRowAdapter.ViewHold
         private ImageView userRowIcon;
         private TextView userRowNameTextview;
         private TextView userRowAccountTextview;
+        private TextView userRowAttendanceTextview;
         private ImageButton userRowAddButton;
 
         public ViewHolder(View v) {
@@ -165,6 +163,7 @@ public class UserRowAdapter extends RecyclerView.Adapter<UserRowAdapter.ViewHold
             userRowIcon = (ImageView) v.findViewById(R.id.user_row_icon);
             userRowNameTextview = (TextView) v.findViewById(R.id.user_row_name_textview);
             userRowAccountTextview = (TextView) v.findViewById(R.id.user_row_account_textview);
+            userRowAttendanceTextview = (TextView) v.findViewById(R.id.user_row_attendances_textview);
             userRowAddButton = (ImageButton) v.findViewById(R.id.user_row_add_button);
             v.setOnClickListener(this);
 

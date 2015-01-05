@@ -9,8 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.widget.Toast;
 
-import com.yknx.android.club.DummyFragment;
-import com.yknx.android.club.FragmentAttendance;
+import com.yknx.android.club.fragments.FragmentAttendance;
 import com.yknx.android.club.R;
 import com.yknx.android.club.fragments.NavigationDrawerCallbacks;
 import com.yknx.android.club.fragments.NavigationDrawerFragment;

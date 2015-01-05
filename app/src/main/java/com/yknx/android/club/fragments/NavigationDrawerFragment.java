@@ -1,8 +1,6 @@
 package com.yknx.android.club.fragments;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,10 +13,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 
 
 import com.yknx.android.club.R;
 import com.yknx.android.club.model.NavigationItem;
+import com.yknx.android.club.util.Preferences;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,15 +30,19 @@ import java.util.List;
 public class NavigationDrawerFragment extends android.support.v4.app.Fragment implements NavigationDrawerCallbacks {
     private static final String PREF_USER_LEARNED_DRAWER = "navigation_drawer_learned";
     private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
-    private static final String PREFERENCES_FILE = "my_app_settings"; //TODO: change this to your file
+    private static final String STATE_SELECTED_TERM = Preferences.PREF_SELECTED_TERM;
     private NavigationDrawerCallbacks mCallbacks;
     private RecyclerView mDrawerList;
     private View mFragmentContainerView;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
+    private Spinner mSpinnerTerms;
     private boolean mUserLearnedDrawer;
     private boolean mFromSavedInstanceState;
     private int mCurrentSelectedPosition;
+
+    private OnSpinnerClick mOnSpinnerClick;
+    private Long mClub = 0L; //TODO: IMPLEMENT CLUB ID LOADING
 
 
     @Nullable
@@ -45,6 +50,9 @@ public class NavigationDrawerFragment extends android.support.v4.app.Fragment im
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         mDrawerList = (RecyclerView) view.findViewById(R.id.drawerList);
+        mSpinnerTerms = (Spinner) view.findViewById(R.id.spinnerTerms);
+
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mDrawerList.setLayoutManager(layoutManager);
@@ -55,17 +63,24 @@ public class NavigationDrawerFragment extends android.support.v4.app.Fragment im
         adapter.setNavigationDrawerCallbacks(this);
         mDrawerList.setAdapter(adapter);
         selectItem(mCurrentSelectedPosition);
+        mSpinnerTerms.setSelection(currentTerm());
+        mSpinnerTerms.setOnItemSelectedListener(mOnSpinnerClick);
         return view;
+    }
+
+    private int currentTerm() {
+        return Preferences.getSelectedTerm(getActivity(),mClub);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUserLearnedDrawer = Boolean.valueOf(readSharedSetting(getActivity(), PREF_USER_LEARNED_DRAWER, "false"));
+        mUserLearnedDrawer = Boolean.valueOf(Preferences.readSharedSettingString(getActivity(), PREF_USER_LEARNED_DRAWER, "false"));
         if (savedInstanceState != null) {
             mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
             mFromSavedInstanceState = true;
         }
+        mOnSpinnerClick = new OnSpinnerClick();
     }
 
     @Override
@@ -104,7 +119,7 @@ public class NavigationDrawerFragment extends android.support.v4.app.Fragment im
                 if (!isAdded()) return;
                 if (!mUserLearnedDrawer) {
                     mUserLearnedDrawer = true;
-                    saveSharedSetting(getActivity(), PREF_USER_LEARNED_DRAWER, "true");
+                    Preferences.saveSharedSettingString(getActivity(), PREF_USER_LEARNED_DRAWER, "true");
                 }
                 ActivityCompat.invalidateOptionsMenu(getActivity());
                 //getActivity().invalidateOptionsMenu();
@@ -185,16 +200,17 @@ public class NavigationDrawerFragment extends android.support.v4.app.Fragment im
         mDrawerLayout = drawerLayout;
     }
 
-    public static void saveSharedSetting(Context ctx, String settingName, String settingValue) {
-        SharedPreferences sharedPref = ctx.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(settingName, settingValue);
-        //editor.apply();
-        editor.commit();
-    }
 
-    public static String readSharedSetting(Context ctx, String settingName, String defaultValue) {
-        SharedPreferences sharedPref = ctx.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
-        return sharedPref.getString(settingName, defaultValue);
+
+    private class OnSpinnerClick implements AdapterView.OnItemSelectedListener{
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            Preferences.saveSharedSettingInt(getActivity(), STATE_SELECTED_TERM, position);
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+
+        }
     }
 }

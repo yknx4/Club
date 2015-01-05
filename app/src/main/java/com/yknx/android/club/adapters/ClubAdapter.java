@@ -19,9 +19,9 @@ import com.yknx.android.club.data.ClubsContract;
  */
 public class ClubAdapter extends CursorAdapter {
 
-    private final int VIEW_TYPE_TODAY =0;
-    private final int VIEW_TYPE_DEFAULT =1;
-
+    public static final long INVALID_CLUB_ID = -1;
+    private final int VIEW_TYPE_TODAY = 0;
+    private final int VIEW_TYPE_DEFAULT = 1;
 
 
     public ClubAdapter(Context context, Cursor c, int flags) {
@@ -39,17 +39,23 @@ public class ClubAdapter extends CursorAdapter {
         //return position==0?VIEW_TYPE_TODAY:VIEW_TYPE_DEFAULT;
     }
 
+    public long getClubId(int position) {
+        Cursor c = (Cursor) getItem(position);
+        if (c == null || c.isBeforeFirst() || c.isAfterLast()) return INVALID_CLUB_ID;
+        else return c.getLong(c.getColumnIndex(ClubsContract.ClubEntry._ID));
+    }
+
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         int viewType = getItemViewType(cursor.getPosition());
         int layoutId = -1;
 
-        switch (viewType){
+        switch (viewType) {
             case VIEW_TYPE_TODAY:
-                layoutId= R.layout.club_list_item;
+                layoutId = R.layout.club_list_item;
                 break;
             case VIEW_TYPE_DEFAULT:
-                layoutId=R.layout.club_list_item;
+                layoutId = R.layout.club_list_item;
                 break;
         }
         View view = LayoutInflater.from(context).inflate(layoutId, parent, false);
@@ -68,22 +74,18 @@ public class ClubAdapter extends CursorAdapter {
         String color = cursor.getString(cursor.getColumnIndex(ClubsContract.ClubEntry.COLUMN_CLUB_COLOR));
         long clubId = cursor.getLong(cursor.getColumnIndex(ClubsContract.ClubEntry._ID));
 
-        Cursor clubs = mContext.getContentResolver().query(ClubsContract.RegistrationEntry.builRegistrationUriWithClub(clubId),null,null,null,null);
+        Cursor clubs = mContext.getContentResolver().query(ClubsContract.RegistrationEntry.builRegistrationUriWithClub(clubId), null, null, null, null);
 
 
-        String users = clubs.getCount()+"";
+        String users = clubs.getCount() + "";
 
 
-        if(icon_uri==null || icon_uri.equals("")) {
+        if (icon_uri == null || icon_uri.equals("")) {
             viewHolder.iconView.setImageResource(R.drawable.default_icon);
             viewHolder.iconView.setColorFilter(Color.parseColor(color));
-        }
-        else viewHolder.iconView.setImageURI(Uri.parse(icon_uri));
+        } else viewHolder.iconView.setImageURI(Uri.parse(icon_uri));
         viewHolder.nameView.setText(name);
         viewHolder.usersView.setText(users);
-
-
-
 
 
     }

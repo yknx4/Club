@@ -1,9 +1,7 @@
-package com.yknx.android.club;
+package com.yknx.android.club.fragments;
 
 
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,6 +13,9 @@ import android.os.Bundle;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.EditText;
+
+import com.yknx.android.club.R;
+import com.yknx.android.club.Utility;
 
 public class FragmentAttendance extends Fragment {
 
@@ -35,11 +36,11 @@ public class FragmentAttendance extends Fragment {
     }
 
     Fragment currentUserList;
+    Fragment currentUserInfo;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         topContainer = (FrameLayout) view.findViewById(R.id.top_container);
         digitsContainer = (LinearLayout) view.findViewById(R.id.digits_container);
         bottomContainer = (FrameLayout) view.findViewById(R.id.bottom_container);
@@ -48,8 +49,6 @@ public class FragmentAttendance extends Fragment {
         customTextWatcher = new CustomTextWatcher();
         digitsEditText.addTextChangedListener(customTextWatcher);
         createUserList();
-
-
     }
 
 
@@ -63,8 +62,21 @@ public class FragmentAttendance extends Fragment {
         setCardContainerHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         topContainer.setVisibility(View.VISIBLE);
         currentUserList = new FragmentUserList();
-        Utility.replaceFragment(R.id.top_container,currentUserList,getActivity());
+        Utility.replaceFragment(R.id.top_container, currentUserList, getActivity());
         customTextWatcher.setParent((FragmentUserList) currentUserList);
+    }
+
+    private void createUserInfo(){
+        bottomContainer.setVisibility(View.VISIBLE);
+        currentUserInfo = new DummyFragment();
+        Utility.replaceFragment(R.id.bottom_container,currentUserInfo,getActivity());
+    }
+    private void deleteUserInfo() {
+        bottomContainer.setVisibility(View.GONE);
+        Log.d(LOG_TAG, "Deleting user info.");
+        Utility.deleteFragment(currentUserInfo,getActivity());
+        currentUserInfo = null;
+
     }
 
     private void deleteUserList() {
@@ -74,7 +86,7 @@ public class FragmentAttendance extends Fragment {
         customTextWatcher.setParent(null);
         Utility.deleteFragment(currentUserList,getActivity());
         currentUserList = null;
-        Log.d(LOG_TAG, "Fragment destroyed.");
+
     }
 
 
@@ -113,14 +125,19 @@ public class FragmentAttendance extends Fragment {
                 Log.d(LOG_TAG, "Text: " + s);
                 if (s.toString().equals("9999")) {
                     if (currentUserList != null) deleteUserList();
+                    if(currentUserInfo==null) createUserInfo();
                 } else {
                     parent.filter(s);
                 }
 
             }else{
                 if (currentUserList == null) {
+
                     createUserList();
                     Log.d(LOG_TAG, "Created");
+                }
+                if(currentUserInfo!=null){
+                    deleteUserInfo();
                 }
             }
         }

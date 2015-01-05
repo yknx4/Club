@@ -24,6 +24,16 @@ public class User {
     private String account;
     private long id;
 
+    public int getAttendances() {
+        return attendances;
+    }
+
+    public void setAttendances(int attendances) {
+        this.attendances = attendances;
+    }
+
+    private int attendances;
+
     public long getId() {
         return id;
     }

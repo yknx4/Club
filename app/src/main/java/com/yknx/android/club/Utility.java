@@ -6,10 +6,12 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -28,27 +30,32 @@ import java.util.Random;
  */
 public class Utility {
 
+    private static final String LOG_TAG = Utility.class.getSimpleName();
 
-    public static void replaceFragment(int id, Fragment fragment, Context source){
+
+    public static void replaceFragment(int id, Fragment fragment, Context source) {
         FragmentManager fm = ((Activity) source).getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.replace(id, fragment);
         ft.commit();
+
     }
 
 
-    public static void deleteFragment(Fragment fragment, Context source){
+    public static void deleteFragment(Fragment fragment, Context source) {
         FragmentManager fm = ((Activity) source).getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.remove(fragment);
         ft.commitAllowingStateLoss();
+        Log.d(LOG_TAG, "Fragment destroyed.");
     }
-    public static ContentValues createClubValues(Club club){
+
+    public static ContentValues createClubValues(Club club) {
         String fakeName = club.name;
         String fakeColor = club.color;
-        String fakeIcon="";
-        if(club.icon!=null)
-        fakeIcon = club.icon.toString();
+        String fakeIcon = "";
+        if (club.icon != null)
+            fakeIcon = club.icon.toString();
         int terms = club.terms;
         int atLeast = club.atLeast;
 
@@ -61,6 +68,7 @@ public class Utility {
         values.put(ClubsContract.ClubEntry.COLUMN_CLUB_ATLEAST, atLeast);
         return values;
     }
+
     public static ContentValues createClubValues(String name, String color) {
         String fakeName = name;
         String fakeColor = color;
@@ -78,7 +86,7 @@ public class Utility {
         return values;
     }
 
-    public   static ContentValues createFakeClubValues() {
+    public static ContentValues createFakeClubValues() {
         String fakeName = "댄스";
         String fakeColor = "#007FFF";
         String fakeIcon = "";
@@ -94,7 +102,8 @@ public class Utility {
         testValues.put(ClubsContract.ClubEntry.COLUMN_CLUB_ATLEAST, atLeast);
         return testValues;
     }
-    public   static ContentValues createFakeClubValues2() {
+
+    public static ContentValues createFakeClubValues2() {
         String fakeName = "倶楽部";
         String fakeColor = "#CC8400";
         String fakeIcon = "";
@@ -111,7 +120,7 @@ public class Utility {
         return testValues;
     }
 
-    public  static ContentValues createFakeUserValues1() {
+    public static ContentValues createFakeUserValues1() {
         String fakeName = "Jorge Figueroa";
         String fakeAccount = "20094894";
         String fakeCampus = "Telematica";
@@ -130,7 +139,7 @@ public class Utility {
         return testValues;
     }
 
-    public  static ContentValues createFakeUserValues2() {
+    public static ContentValues createFakeUserValues2() {
         String fakeName = "Mariana Preciado";
         String fakeAccount = "20094476";
         String fakeCampus = "Psicologia";
@@ -149,38 +158,41 @@ public class Utility {
         return testValues;
     }
 
-    public  static ContentValues createRegistration(long club, long user) {
+    public static ContentValues createRegistration(long club, long user) {
         ContentValues testValues = new ContentValues();
         testValues.put(ClubsContract.RegistrationEntry.COLUMN_REGISTRATION_CLUB, club);
         testValues.put(ClubsContract.RegistrationEntry.COLUMN_REGISTRATION_USER, user);
         return testValues;
     }
 
-    public   static ContentValues createFakeAssist(long registrationId, int term) {
+    public static ContentValues createFakeAssist(long registrationId, int term) {
         ContentValues testValues = new ContentValues();
 
-        testValues.put(ClubsContract.AssistEntry.COLUMN_ASSIST_REGISTRATION,registrationId);
+        testValues.put(ClubsContract.AssistEntry.COLUMN_ASSIST_REGISTRATION, registrationId);
         testValues.put(ClubsContract.AssistEntry.COLUMN_ASSIST_TERM, term);
         testValues.put(ClubsContract.AssistEntry.COLUMN_ASSIST_DATE, "20140910");
         return testValues;
     }
-    public   static ContentValues createAssist(long registrationId, int term) {
+
+    public static ContentValues createAssist(long registrationId, int term) {
         ContentValues testValues = new ContentValues();
 
-        testValues.put(ClubsContract.AssistEntry.COLUMN_ASSIST_REGISTRATION,registrationId);
+        testValues.put(ClubsContract.AssistEntry.COLUMN_ASSIST_REGISTRATION, registrationId);
         testValues.put(ClubsContract.AssistEntry.COLUMN_ASSIST_TERM, term);
         testValues.put(ClubsContract.AssistEntry.COLUMN_ASSIST_DATE, ClubsContract.getDbDateString(new Date()));
         return testValues;
     }
 
-    public static void setHeader(View rootView, long clubId, Context mContext){
-        setHeader(rootView,mContext.getContentResolver().query(ClubsContract.ClubEntry.buildClubUri(clubId),null,null,null,null),mContext);
+    public static void setHeader(View rootView, long clubId, Context mContext) {
+        setHeader(rootView, mContext.getContentResolver().query(ClubsContract.ClubEntry.buildClubUri(clubId), null, null, null, null), mContext);
     }
-    public static void setHeader(View rootView, Cursor cursor, Context mContext){
-        setHeader(rootView,0,cursor,mContext);
+
+    public static void setHeader(View rootView, Cursor cursor, Context mContext) {
+        setHeader(rootView, 0, cursor, mContext);
 
     }
-    public static void setHeader(View rootView, int position, Cursor cursor, Context mContext){
+
+    public static void setHeader(View rootView, int position, Cursor cursor, Context mContext) {
         if (!cursor.moveToPosition(position)) return;
         String icon_uri = cursor.getString(cursor.getColumnIndex(ClubsContract.ClubEntry.COLUMN_CLUB_ICON_URI));
         String name = cursor.getString(cursor.getColumnIndex(ClubsContract.ClubEntry.COLUMN_CLUB_NAME));
@@ -203,16 +215,16 @@ public class Utility {
         String term = mContext.getString(R.string.format_terms, mRandom.nextInt(termps) + 1);
 
 
-       if(nameView!=null) nameView.setText(name);
-       if(usersView!=null) usersView.setText(users);
-        if(termView!=null) termView.setText(term);
+        if (nameView != null) nameView.setText(name);
+        if (usersView != null) usersView.setText(users);
+        if (termView != null) termView.setText(term);
 
         int color = Color.parseColor(cursor.getString(cursor.getColumnIndex(ClubsContract.ClubEntry.COLUMN_CLUB_COLOR)));
-        if(header==null || headerIcon==null) return;
+        if (header == null || headerIcon == null) return;
         header.setBackgroundColor(color);
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ){
-            int darkerColor = darker(color,.8F);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            int darkerColor = darker(color, .8F);
             Window window = ((Activity) mContext).getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -229,15 +241,16 @@ public class Utility {
     /**
      * Returns darker version of specified <code>color</code>.
      */
-    public static int darker (int color, float factor) {
-        int a = Color.alpha( color );
-        int r = Color.red( color );
-        int g = Color.green( color );
-        int b = Color.blue( color );
+    public static int darker(int color, float factor) {
+        int a = Color.alpha(color);
+        int r = Color.red(color);
+        int g = Color.green(color);
+        int b = Color.blue(color);
 
-        return Color.argb( a,
-                Math.max( (int)(r * factor), 0 ),
-                Math.max( (int)(g * factor), 0 ),
-                Math.max( (int)(b * factor), 0 ) );
+        return Color.argb(a,
+                Math.max((int) (r * factor), 0),
+                Math.max((int) (g * factor), 0),
+                Math.max((int) (b * factor), 0));
     }
+
 }
