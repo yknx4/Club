@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
@@ -176,6 +177,23 @@ public class Utility {
 
     }
 
+
+    public static void setActionBarColorFromBaseColor(int color, Context context){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            int darkerColor = darker(color, .8F);
+            Window window = ((Activity) context).getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(darkerColor);
+        }
+    }
+    public static void setActionBarColorFromClubColor(Club club, Context context){
+
+            int color = Color.parseColor(club.color);
+            setActionBarColorFromBaseColor(color, context);
+
+    }
+
     public static void setHeader(View rootView, int position, Cursor cursor, Context mContext) {
         if (!cursor.moveToPosition(position)) return;
         String icon_uri = cursor.getString(cursor.getColumnIndex(ClubsContract.ClubEntry.COLUMN_CLUB_ICON_URI));
@@ -207,13 +225,7 @@ public class Utility {
         if (header == null || headerIcon == null) return;
         header.setBackgroundColor(color);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            int darkerColor = darker(color, .8F);
-            Window window = ((Activity) mContext).getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(darkerColor);
-        }
+        setActionBarColorFromBaseColor(color,mContext);
 
 
         if (icon_uri == null || icon_uri.equals("")) {
@@ -237,4 +249,7 @@ public class Utility {
                 Math.max((int) (b * factor), 0));
     }
 
+    public static Drawable getIcon(long id) {
+        return null;
+    }
 }

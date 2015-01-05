@@ -66,6 +66,8 @@ public class ClubDetails extends ActionBarActivity
         Intent opt = getIntent();
         if(opt !=null){
             mClub = opt.getLongExtra(DetailAssistFragment.ARG_CLUB,0);
+        }else{
+            this.finish();
         }
     }
     @Override
