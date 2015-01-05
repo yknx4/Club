@@ -9,11 +9,11 @@ import android.os.Build;
 import android.test.AndroidTestCase;
 import android.util.Log;
 
-import com.yknx.android.club.data.ClubsContract;
+import com.yknx.android.club.model.ClubsContract;
 import com.yknx.android.club.data.ClubsDbHelper;
-import com.yknx.android.club.data.ClubsContract.ClubEntry;
-import com.yknx.android.club.data.ClubsContract.RegistrationEntry;
-import com.yknx.android.club.data.ClubsContract.UserEntry;
+import com.yknx.android.club.model.ClubsContract.ClubEntry;
+import com.yknx.android.club.model.ClubsContract.RegistrationEntry;
+import com.yknx.android.club.model.ClubsContract.UserEntry;
 
 import java.util.Set;
 

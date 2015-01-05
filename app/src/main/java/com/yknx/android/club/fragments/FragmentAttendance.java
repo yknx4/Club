@@ -22,7 +22,7 @@ import com.yknx.android.club.R;
 import com.yknx.android.club.Utility;
 import com.yknx.android.club.callbacks.FragmentUserDetailsCallbacks;
 import com.yknx.android.club.callbacks.UserRowAdapterCallbacks;
-import com.yknx.android.club.data.ClubsContract;
+import com.yknx.android.club.model.ClubsContract;
 import com.yknx.android.club.data.ClubsProvider;
 import com.yknx.android.club.model.Club;
 import com.yknx.android.club.model.User;
@@ -33,11 +33,11 @@ public class FragmentAttendance extends Fragment implements UserRowAdapterCallba
 
     private static final String LOG_TAG = FragmentAttendance.class.getSimpleName();
 
-    private FrameLayout topContainer;
-    private CardView cardContainer;
-    private LinearLayout digitsContainer;
-    private FrameLayout bottomContainer;
-    private EditText digitsEditText;
+    private FrameLayout mTopContainer;
+    private CardView mCardContainer;
+    private LinearLayout mDigitsContainer;
+    private FrameLayout mBottomContainer;
+    private EditText mDigitsEditText;
     private Club mClub;
 
 
@@ -55,34 +55,34 @@ public class FragmentAttendance extends Fragment implements UserRowAdapterCallba
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        topContainer = (FrameLayout) view.findViewById(R.id.top_container);
-        digitsContainer = (LinearLayout) view.findViewById(R.id.digits_container);
-        bottomContainer = (FrameLayout) view.findViewById(R.id.bottom_container);
-        digitsEditText = (EditText) getView().findViewById(R.id.digits);
-        cardContainer = (CardView) getView().findViewById(R.id.card_container);
+        mTopContainer = (FrameLayout) view.findViewById(R.id.top_container);
+        mDigitsContainer = (LinearLayout) view.findViewById(R.id.digits_container);
+        mBottomContainer = (FrameLayout) view.findViewById(R.id.bottom_container);
+        mDigitsEditText = (EditText) getView().findViewById(R.id.digits);
+        mCardContainer = (CardView) getView().findViewById(R.id.card_container);
         customTextWatcher = new CustomTextWatcher();
-        digitsEditText.addTextChangedListener(customTextWatcher);
+        mDigitsEditText.addTextChangedListener(customTextWatcher);
         createUserList();
     }
 
 
     private void setCardContainerHeight(int height) {
-        ViewGroup.LayoutParams params = cardContainer.getLayoutParams();
+        ViewGroup.LayoutParams params = mCardContainer.getLayoutParams();
         params.height = height;
-        cardContainer.setLayoutParams(params);
+        mCardContainer.setLayoutParams(params);
     }
 
     private void createUserList() {
         Log.d(LOG_TAG,"Creating user list.");
         setCardContainerHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-        topContainer.setVisibility(View.VISIBLE);
+        mTopContainer.setVisibility(View.VISIBLE);
         FragmentUserList fragmentUserList = new FragmentUserList();
         fragmentUserList.setClub(mClub);
         fragmentUserList.setAdapterCallback(this);
         currentUserList = fragmentUserList;
         FragmentUtility.replaceFragment(R.id.top_container, currentUserList, getActivity());
         customTextWatcher.setParent((FragmentUserList) currentUserList);
-        ((FragmentUserList) currentUserList).filter(digitsEditText.getText());
+        ((FragmentUserList) currentUserList).filter(mDigitsEditText.getText());
     }
 
     @Override
@@ -92,11 +92,11 @@ public class FragmentAttendance extends Fragment implements UserRowAdapterCallba
 
         if(currentUserList==null)createUserList();
         if(currentUserInfo!=null)deleteUserInfo();
-        if (digitsEditText.requestFocus()) {
+        if (mDigitsEditText.requestFocus()) {
             getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
-        digitsEditText.append("");
-        digitsEditText.setSelection(digitsEditText.getText().length(),digitsEditText.getText().length());
+        mDigitsEditText.append("");
+        mDigitsEditText.setSelection(mDigitsEditText.getText().length(), mDigitsEditText.getText().length());
         Utility.showKeyboard(getActivity());
 
 
@@ -106,7 +106,7 @@ public class FragmentAttendance extends Fragment implements UserRowAdapterCallba
 
     private void createUserInfo(User user) {
         Log.d(LOG_TAG, "Creating user info.");
-        bottomContainer.setVisibility(View.VISIBLE);
+        mBottomContainer.setVisibility(View.VISIBLE);
         UserDetailsFragment userDetailsFragment = new UserDetailsFragment();
         userDetailsFragment.setFragmentUserDetailsCallbacks(this);
         userDetailsFragment.setClub(mClub);
@@ -114,19 +114,19 @@ public class FragmentAttendance extends Fragment implements UserRowAdapterCallba
         currentUserInfo = userDetailsFragment;
         FragmentUtility.replaceFragment(R.id.bottom_container, currentUserInfo, getActivity());
         setDigitEditTextStatus(false);
-        digitsEditText.setText(user.getAccount());
+        mDigitsEditText.setText(user.getAccount());
 
 
     }
 
     private void setDigitEditTextStatus(boolean state) {
-       digitsEditText.setFocusable(state);
-        digitsEditText.setFocusableInTouchMode(state);
-        digitsEditText.setLongClickable(state);
+       mDigitsEditText.setFocusable(state);
+        mDigitsEditText.setFocusableInTouchMode(state);
+        mDigitsEditText.setLongClickable(state);
     }
 
     private void deleteUserInfo() {
-        bottomContainer.setVisibility(View.GONE);
+        mBottomContainer.setVisibility(View.GONE);
         Log.d(LOG_TAG, "Deleting user info.");
         FragmentUtility.deleteFragment(currentUserInfo, getActivity());
         currentUserInfo = null;
@@ -134,7 +134,7 @@ public class FragmentAttendance extends Fragment implements UserRowAdapterCallba
     }
 
     private void deleteUserList() {
-        topContainer.setVisibility(View.GONE);
+        mTopContainer.setVisibility(View.GONE);
         setCardContainerHeight(ViewGroup.LayoutParams.MATCH_PARENT);
         Log.d(LOG_TAG, "Deleting user list.");
         customTextWatcher.setParent(null);
@@ -169,7 +169,7 @@ public class FragmentAttendance extends Fragment implements UserRowAdapterCallba
         long assistRowId = ContentUris.parseId(getActivity().getContentResolver().insert(ClubsContract.AttendanceEntry.CONTENT_URI, assist));
         if (assistRowId != -1) {
             Toast.makeText(getActivity(), attendanceMessage, Toast.LENGTH_SHORT).show();
-            digitsEditText.setText("");
+            mDigitsEditText.setText("");
         }
     }
 
@@ -230,7 +230,7 @@ public class FragmentAttendance extends Fragment implements UserRowAdapterCallba
         }
 
         private boolean isValid() {
-            return parent != null && digitsEditText.isFocusable();
+            return parent != null && mDigitsEditText.isFocusable();
         }
 
         @Override

@@ -14,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.support.v7.widget.RecyclerView;
 
+import com.yknx.android.club.AttendanceRowAdapter;
 import com.yknx.android.club.R;
 import com.yknx.android.club.callbacks.FragmentUserDetailsCallbacks;
 import com.yknx.android.club.model.Club;
@@ -24,6 +25,8 @@ public class UserDetailsFragment extends Fragment {
 
 private static final String LOG_TAG = UserDetailsFragment.class.getSimpleName();
 
+
+    //TODO: get registration and term!
     private TextView userDetailName;
     private TextView userDetailEmail;
     private TextView userDetailCampus;
@@ -50,10 +53,13 @@ private static final String LOG_TAG = UserDetailsFragment.class.getSimpleName();
 
     private User user;
     private Club club;
+    private AttendanceRowAdapter mAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+          mAdapter = new AttendanceRowAdapter(getActivity(),1,1);
         return inflater.inflate(R.layout.fragment_user_details, null);
     }
 
@@ -74,6 +80,7 @@ private static final String LOG_TAG = UserDetailsFragment.class.getSimpleName();
         userDetailRecyclerview.setHasFixedSize(true);
 
         userDetailRecyclerview.setItemAnimator(new DefaultItemAnimator());
+
 
 
         userDetailCloseButton.setOnClickListener(new View.OnClickListener() {

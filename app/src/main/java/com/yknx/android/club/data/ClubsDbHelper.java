@@ -4,9 +4,10 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.yknx.android.club.data.ClubsContract.ClubEntry;
-import com.yknx.android.club.data.ClubsContract.RegistrationEntry;
-import com.yknx.android.club.data.ClubsContract.UserEntry;
+import com.yknx.android.club.model.ClubsContract;
+import com.yknx.android.club.model.ClubsContract.ClubEntry;
+import com.yknx.android.club.model.ClubsContract.RegistrationEntry;
+import com.yknx.android.club.model.ClubsContract.UserEntry;
 
 /**
  * Created by Yknx on 07/08/2014.

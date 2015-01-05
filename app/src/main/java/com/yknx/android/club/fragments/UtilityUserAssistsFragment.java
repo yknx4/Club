@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import com.yknx.android.club.R;
 import com.yknx.android.club.tasks.GetAttendancesTask;
-import com.yknx.android.club.data.ClubsContract;
+import com.yknx.android.club.model.ClubsContract;
 import com.yknx.android.club.model.User;
 
 import java.text.SimpleDateFormat;

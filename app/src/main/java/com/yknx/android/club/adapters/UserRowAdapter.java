@@ -22,7 +22,7 @@ import com.yknx.android.club.R;
 import com.yknx.android.club.tasks.GetAttendancesTask;
 import com.yknx.android.club.callbacks.UserRowAdapterCallbacks;
 import com.yknx.android.club.controller.UserController;
-import com.yknx.android.club.data.ClubsContract;
+import com.yknx.android.club.model.ClubsContract;
 import com.yknx.android.club.data.ClubsProvider;
 import com.yknx.android.club.model.Club;
 import com.yknx.android.club.model.User;
@@ -47,9 +47,6 @@ public class UserRowAdapter extends RecyclerView.Adapter<UserRowAdapter.ViewHold
 
     private UserRowAdapterCallbacks userRowAdapterCallbacks;
 
-    public void refresh() {
-        notifyDataSetChanged();
-    }
 
     private Context context;
     private LayoutInflater layoutInflater;
@@ -191,7 +188,7 @@ public class UserRowAdapter extends RecyclerView.Adapter<UserRowAdapter.ViewHold
         List<User> result = new ArrayList<>();
 
         while (c.moveToNext()) {
-            result.add(UserController.getUserFromCursor(c));
+            result.add(UserController.getFromCursor(c));
         }
         return result;
     }

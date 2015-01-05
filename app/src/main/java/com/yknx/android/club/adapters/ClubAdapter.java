@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.yknx.android.club.R;
-import com.yknx.android.club.data.ClubsContract;
+import com.yknx.android.club.model.ClubsContract;
 
 /**
  * Created by Yknx on 08/08/2014.

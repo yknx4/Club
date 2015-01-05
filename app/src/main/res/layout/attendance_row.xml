@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             tools:text="12:14"
             android:fontFamily="sans-serif-condensed"
-            android:id="@+id/user_row_account_textview"
+            android:id="@+id/attendance_hour"
             android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small" />
 
 

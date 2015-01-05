@@ -16,7 +16,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.yknx.android.club.R;
-import com.yknx.android.club.data.ClubsContract;
+import com.yknx.android.club.model.ClubsContract;
 import com.yknx.android.club.data.ClubsProvider;
 import com.yknx.android.club.model.Club;
 

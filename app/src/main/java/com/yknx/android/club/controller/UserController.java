@@ -2,7 +2,7 @@ package com.yknx.android.club.controller;
 
 import android.database.Cursor;
 
-import com.yknx.android.club.data.ClubsContract;
+import com.yknx.android.club.model.ClubsContract;
 import com.yknx.android.club.model.User;
 
 /**
@@ -10,7 +10,7 @@ import com.yknx.android.club.model.User;
  */
 public class UserController {
 
-    public static User getUserFromCursor(Cursor c){
+    public static User getFromCursor(Cursor c){
         User result = new User();
         String name = c.getString(c.getColumnIndex(ClubsContract.UserEntry.COLUMN_USER_NAME));
         String account = c.getString(c.getColumnIndex(ClubsContract.UserEntry.COLUMN_USER_ACCOUNT));

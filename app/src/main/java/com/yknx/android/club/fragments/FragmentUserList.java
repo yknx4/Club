@@ -2,8 +2,6 @@ package com.yknx.android.club.fragments;
 
 
 import android.app.Fragment;
-import android.content.ContentUris;
-import android.content.ContentValues;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
@@ -12,15 +10,11 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.widget.Toast;
 
 import com.yknx.android.club.R;
-import com.yknx.android.club.Utility;
 import com.yknx.android.club.adapters.UserRowAdapter;
 import com.yknx.android.club.callbacks.UserRowAdapterCallbacks;
-import com.yknx.android.club.data.ClubsContract;
 import com.yknx.android.club.model.Club;
-import com.yknx.android.club.model.User;
 import com.yknx.android.club.util.DividerItemDecoration;
 
 public class FragmentUserList extends Fragment {

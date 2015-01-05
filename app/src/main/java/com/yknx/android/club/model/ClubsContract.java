@@ -1,4 +1,4 @@
-package com.yknx.android.club.data;
+package com.yknx.android.club.model;
 
 import android.content.ContentUris;
 import android.net.Uri;

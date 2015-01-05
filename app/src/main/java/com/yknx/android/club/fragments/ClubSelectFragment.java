@@ -27,7 +27,7 @@ import com.yknx.android.club.adapters.ClubAdapter;
 import com.yknx.android.club.R;
 import com.yknx.android.club.activities.SaveCreate_Club;
 import com.yknx.android.club.Utility;
-import com.yknx.android.club.data.ClubsContract;
+import com.yknx.android.club.model.ClubsContract;
 import com.yknx.android.club.util.Preferences;
 
 /**
