@@ -1,8 +1,5 @@
 package com.yknx.android.club.adapters;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.Context;
@@ -10,8 +7,6 @@ import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
-
-
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,9 +19,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.yknx.android.club.R;
+import com.yknx.android.club.Tasks.GetAttendancesTask;
 import com.yknx.android.club.controller.UserController;
 import com.yknx.android.club.data.ClubsContract;
+import com.yknx.android.club.data.ClubsProvider;
+import com.yknx.android.club.model.Club;
 import com.yknx.android.club.model.User;
+import com.yknx.android.club.util.Preferences;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserRowAdapter extends RecyclerView.Adapter<UserRowAdapter.ViewHolder> implements Filterable, LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -38,9 +40,12 @@ public class UserRowAdapter extends RecyclerView.Adapter<UserRowAdapter.ViewHold
     private Context context;
     private LayoutInflater layoutInflater;
     private LoaderManager mLoaderManager;
+    private Club mClub;
 
 
-    public UserRowAdapter(Context context) {
+    public UserRowAdapter(Context context, Club club) {
+        this.mClub = club;
+        Log.d(LOG_TAG,"Club set: "+club.name);
         Log.d(LOG_TAG, "UserRowAdapter started.");
 
         this.context = context;
@@ -75,9 +80,29 @@ public class UserRowAdapter extends RecyclerView.Adapter<UserRowAdapter.ViewHold
     }
 
 
-    private void initializeViews(User object, ViewHolder holder) {
+    private void initializeViews(User object, final ViewHolder holder) {
         holder.userRowAccountTextview.setText(object.getAccount());
         holder.userRowNameTextview.setText(object.getName());
+        if (mClub == null) {
+            holder.userRowAttendanceTextview.setVisibility(View.INVISIBLE);
+        } else {
+            int term = Preferences.getSelectedTerm(context, mClub.id);
+            int registration = ClubsProvider.getRegistration(context, mClub.id, object.getId());
+            if (registration == ClubsContract.RegistrationEntry.NO_REGISTRATION) {
+//                holder.userRowAttendanceTextview.setText("0");
+                holder.userRowAttendanceTextview.setVisibility(View.INVISIBLE);
+            } else {
+                GetAttendancesTask getAttendancesTask = new GetAttendancesTask(context, registration, term) {
+                    @Override
+                    protected void onPostExecute(Cursor cursor) {
+                        super.onPostExecute(cursor);
+                        ViewHolder toSet = holder;
+                        toSet.userRowAttendanceTextview.setText(String.valueOf(cursor.getCount()));
+                    }
+                };
+                getAttendancesTask.execute();
+            }
+        }
         //TODO implement
     }
 
@@ -92,7 +117,7 @@ public class UserRowAdapter extends RecyclerView.Adapter<UserRowAdapter.ViewHold
                     ClubsContract.UserEntry.COLUMN_USER_NAME + " ASC");
             filterResults.values = userListFromCursor(filteredDataCursor);
             filterResults.count = filteredDataCursor.getCount();
-            Log.v(LOG_TAG, " did filter. ("+filteredDataCursor.getCount()+")");
+            Log.v(LOG_TAG, " did filter. (" + filteredDataCursor.getCount() + ")");
             filteredDataCursor.close();
             return filterResults;
         }
