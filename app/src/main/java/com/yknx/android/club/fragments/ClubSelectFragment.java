@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -25,7 +24,6 @@ import android.widget.ListView;
 
 import com.yknx.android.club.activities.ClubDataActivity;
 import com.yknx.android.club.adapters.ClubAdapter;
-import com.yknx.android.club.activities.ClubDetails;
 import com.yknx.android.club.R;
 import com.yknx.android.club.activities.SaveCreate_Club;
 import com.yknx.android.club.Utility;
@@ -42,10 +40,10 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
     private final String LOG_TAG = ClubSelectFragment.class.getSimpleName();
     ClubAdapter mClubAdapter;
     private int mListViewPosition = ListView.INVALID_POSITION;
-    private ListView listView;
-    private View mainView;
-    private Cursor mainData;
-    ImageButton openClubButton;
+    private ListView mClubListView;
+    private View mMainView;
+    private Cursor mCursorMainData;
+    ImageButton mOpenClubButton;
 
     public ClubSelectFragment() {
 
@@ -62,10 +60,10 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
-        mainData = data;
+        mCursorMainData = data;
         mClubAdapter.swapCursor(data);
         if (data.getCount() == 0) {
-            openClubButton.setVisibility(View.INVISIBLE);
+            mOpenClubButton.setVisibility(View.INVISIBLE);
             //TODO: Add handler when Data = 0
         } else {
             Long lastClub = Preferences.getLastSelectedClub(getActivity());
@@ -73,30 +71,30 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
 
             Long currClub = mClubAdapter.getClubId(lastPosition);
             if (lastClub == currClub) {
-                setClub(mainView,mListViewPosition);
+                setClub(mMainView,mListViewPosition);
             }else{
                 mListViewPosition = ListView.INVALID_POSITION;
                 Preferences.saveSharedSettingLong(getActivity(),Preferences.PREF_LAST_SELECTED_CLUB, ClubAdapter.INVALID_CLUB_ID);
                 Preferences.saveSharedSettingInt(getActivity(),Preferences.PREF_LAST_SELECTED_POSITION,ListView.INVALID_POSITION);
-                openClubButton.setVisibility(View.INVISIBLE);
+                mOpenClubButton.setVisibility(View.INVISIBLE);
             }
-            if (lastPosition==ListView.INVALID_POSITION) openClubButton.setVisibility(View.INVISIBLE);
+            if (lastPosition==ListView.INVALID_POSITION) mOpenClubButton.setVisibility(View.INVISIBLE);
         }
 
 
     }
 
     private void setClub(View view, int clubPosition){
-        listView.setSelection(clubPosition);
+        mClubListView.setSelection(clubPosition);
         setHeader(view, clubPosition);
-        openClubButton.setEnabled(true);
-        openClubButton.setVisibility(View.VISIBLE);
+        mOpenClubButton.setEnabled(true);
+        mOpenClubButton.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mClubAdapter.swapCursor(null);
-        if(!mainData.isClosed())mainData.close();
+        if(!mCursorMainData.isClosed()) mCursorMainData.close();
     }
 
     @Override
@@ -117,7 +115,7 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(!mainData.isClosed()) mainData.close();
+        if(!mCursorMainData.isClosed()) mCursorMainData.close();
 
     }
 
@@ -188,10 +186,10 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
             }
         });
 
-        openClubButton = (ImageButton) rootView.findViewById(R.id.imagebutton_openclub);
+        mOpenClubButton = (ImageButton) rootView.findViewById(R.id.imagebutton_openclub);
 
 
-        openClubButton.setOnClickListener(new View.OnClickListener() {
+        mOpenClubButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -205,26 +203,26 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
 //                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
 //                        currentActivity, view, "test");
 
-               //ActivityCompat.startActivity(currentActivity, openClubDetails,options.toBundle());
-                ActivityCompat.startActivity(currentActivity,openClubDetails,null);
+                //ActivityCompat.startActivity(currentActivity, openClubDetails,options.toBundle());
+                ActivityCompat.startActivity(currentActivity, openClubDetails, null);
 
             }
         });
 
         if (mListViewPosition == ListView.INVALID_POSITION) {
-            openClubButton.setEnabled(false);
+            mOpenClubButton.setEnabled(false);
         }
 
-        listView = (ListView) rootView.findViewById(R.id.listview_clubs);
-        listView.setAdapter(mClubAdapter);
+        mClubListView = (ListView) rootView.findViewById(R.id.listview_clubs);
+        mClubListView.setAdapter(mClubAdapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mClubListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 mListViewPosition = position;
-                Preferences.saveSharedSettingInt(getActivity(),Preferences.PREF_LAST_SELECTED_POSITION,position);
-                Preferences.saveSharedSettingLong(getActivity(),Preferences.PREF_LAST_SELECTED_CLUB,mClubAdapter.getClubId(position));
-                setClub(rootView,position);
+                Preferences.saveSharedSettingInt(getActivity(), Preferences.PREF_LAST_SELECTED_POSITION, position);
+                Preferences.saveSharedSettingLong(getActivity(), Preferences.PREF_LAST_SELECTED_CLUB, mClubAdapter.getClubId(position));
+                setClub(rootView, position);
             }
         });
 
@@ -235,7 +233,7 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
 //        } else {
 //            mListViewPosition = 0;
 //        }
-        mainView = rootView;
+        mMainView = rootView;
         return rootView;
     }
 

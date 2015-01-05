@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.yknx.android.club.data.ClubsContract;
 import com.yknx.android.club.model.Club;
+import com.yknx.android.club.util.Preferences;
 
 import java.util.Date;
 import java.util.Random;
@@ -32,23 +33,6 @@ public class Utility {
 
     private static final String LOG_TAG = Utility.class.getSimpleName();
 
-
-    public static void replaceFragment(int id, Fragment fragment, Context source) {
-        FragmentManager fm = ((Activity) source).getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(id, fragment);
-        ft.commit();
-
-    }
-
-
-    public static void deleteFragment(Fragment fragment, Context source) {
-        FragmentManager fm = ((Activity) source).getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.remove(fragment);
-        ft.commitAllowingStateLoss();
-        Log.d(LOG_TAG, "Fragment destroyed.");
-    }
 
     public static ContentValues createClubValues(Club club) {
         String fakeName = club.name;
@@ -212,7 +196,7 @@ public class Utility {
         Random mRandom = new Random();
 
         String users = mContext.getString(R.string.format_users, clubs.getCount());
-        String term = mContext.getString(R.string.format_terms, mRandom.nextInt(termps) + 1);
+        String term = mContext.getString(R.string.format_terms, Preferences.getSelectedTerm(mContext,clubId)+1);
 
 
         if (nameView != null) nameView.setText(name);

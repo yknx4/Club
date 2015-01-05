@@ -15,7 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.EditText;
 
 import com.yknx.android.club.R;
-import com.yknx.android.club.Utility;
+import com.yknx.android.club.util.FragmentUtility;
 
 public class FragmentAttendance extends Fragment {
 
@@ -62,19 +62,19 @@ public class FragmentAttendance extends Fragment {
         setCardContainerHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         topContainer.setVisibility(View.VISIBLE);
         currentUserList = new FragmentUserList();
-        Utility.replaceFragment(R.id.top_container, currentUserList, getActivity());
+        FragmentUtility.replaceFragment(R.id.top_container, currentUserList, getActivity());
         customTextWatcher.setParent((FragmentUserList) currentUserList);
     }
 
     private void createUserInfo(){
         bottomContainer.setVisibility(View.VISIBLE);
         currentUserInfo = new DummyFragment();
-        Utility.replaceFragment(R.id.bottom_container,currentUserInfo,getActivity());
+        FragmentUtility.replaceFragment(R.id.bottom_container, currentUserInfo, getActivity());
     }
     private void deleteUserInfo() {
         bottomContainer.setVisibility(View.GONE);
         Log.d(LOG_TAG, "Deleting user info.");
-        Utility.deleteFragment(currentUserInfo,getActivity());
+        FragmentUtility.deleteFragment(currentUserInfo, getActivity());
         currentUserInfo = null;
 
     }
@@ -84,7 +84,7 @@ public class FragmentAttendance extends Fragment {
         setCardContainerHeight(ViewGroup.LayoutParams.MATCH_PARENT);
         Log.d(LOG_TAG, "Deleting user list.");
         customTextWatcher.setParent(null);
-        Utility.deleteFragment(currentUserList,getActivity());
+        FragmentUtility.deleteFragment(currentUserList, getActivity());
         currentUserList = null;
 
     }
