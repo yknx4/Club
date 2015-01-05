@@ -17,7 +17,7 @@ import com.yknx.android.club.data.ClubsProvider;
 import com.yknx.android.club.fragments.ClubsNavigationDrawerFragment;
 import com.yknx.android.club.fragments.DetailAssistFragment;
 import com.yknx.android.club.fragments.FragmentAttendance;
-import com.yknx.android.club.fragments.NavigationDrawerCallbacks;
+import com.yknx.android.club.callbacks.NavigationDrawerCallbacks;
 import com.yknx.android.club.model.Club;
 
 /**

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.yknx.android.club.R;
+import com.yknx.android.club.callbacks.NavigationDrawerCallbacks;
 import com.yknx.android.club.model.NavigationItem;
 
 import java.util.List;
