@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.yknx.android.club.R;
 import com.yknx.android.club.adapters.UserRowAdapter;
+import com.yknx.android.club.model.Club;
 import com.yknx.android.club.util.DividerItemDecoration;
 
 public class FragmentUserList extends Fragment {
@@ -21,6 +22,8 @@ private static final String LOG_TAG = FragmentUserList.class.getSimpleName();
 
     private RecyclerView userRecyclerview;
     private UserRowAdapter mAdapter;
+    private Club mClub;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -49,9 +52,21 @@ private static final String LOG_TAG = FragmentUserList.class.getSimpleName();
         userRecyclerview.setItemAnimator(new DefaultItemAnimator());
 
 
-        mAdapter = new UserRowAdapter(getActivity());
+        mAdapter = new UserRowAdapter(getActivity(),mClub);
         userRecyclerview.setAdapter(mAdapter);
 
     }
 
+    public void setClub(Club club) {
+        Log.d(LOG_TAG,"Club set: "+club.name);
+        this.mClub = club;
+    }
+
+    public Club getmClub() {
+        return mClub;
+    }
+
+    public void setmClub(Club mClub) {
+        this.mClub = mClub;
+    }
 }

@@ -48,10 +48,10 @@ public class ClubDataActivity extends ActionBarActivity implements NavigationDra
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_topdrawer);
-        //Get club data
         setClubFromIntent();
         mClub = ClubsProvider.getClub(this, mClubId);
+        setContentView(R.layout.activity_main_topdrawer);
+        //Get club data
         mActivityCreated = true;
 
         //Setup Toolbar
@@ -94,7 +94,9 @@ public class ClubDataActivity extends ActionBarActivity implements NavigationDra
             case 0: {
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
-                ft.replace(R.id.container, new FragmentAttendance());
+                FragmentAttendance fa = new FragmentAttendance();
+                fa.setClub(mClub);
+                ft.replace(R.id.container, fa);
                 ft.commit();
                 setToolbarFromClub();
                 break;

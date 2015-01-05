@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.EditText;
 
 import com.yknx.android.club.R;
+import com.yknx.android.club.model.Club;
 import com.yknx.android.club.util.FragmentUtility;
 
 public class FragmentAttendance extends Fragment {
@@ -26,6 +27,8 @@ public class FragmentAttendance extends Fragment {
     private LinearLayout digitsContainer;
     private FrameLayout bottomContainer;
     private EditText digitsEditText;
+    private Club mClub;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,7 +64,9 @@ public class FragmentAttendance extends Fragment {
     private void createUserList() {
         setCardContainerHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         topContainer.setVisibility(View.VISIBLE);
-        currentUserList = new FragmentUserList();
+        FragmentUserList fragmentUserList = new FragmentUserList();
+        fragmentUserList.setClub(mClub);
+        currentUserList = fragmentUserList;
         FragmentUtility.replaceFragment(R.id.top_container, currentUserList, getActivity());
         customTextWatcher.setParent((FragmentUserList) currentUserList);
     }
@@ -94,6 +99,15 @@ public class FragmentAttendance extends Fragment {
 
     private EditText getDigits() {
         return (EditText) getView().findViewById(R.id.digits);
+    }
+
+    public void setClub(Club club) {
+        Log.d(LOG_TAG,"Club set: "+club.name);
+        this.mClub = club;
+    }
+
+    public Club getClub() {
+        return mClub;
     }
 
 
