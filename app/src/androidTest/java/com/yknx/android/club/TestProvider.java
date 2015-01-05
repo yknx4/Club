@@ -8,7 +8,7 @@ import android.net.Uri;
 import android.test.AndroidTestCase;
 import android.util.Log;
 
-import com.yknx.android.club.data.ClubsContract.AssistEntry;
+import com.yknx.android.club.data.ClubsContract;
 import com.yknx.android.club.data.ClubsContract.ClubEntry;
 import com.yknx.android.club.data.ClubsContract.RegistrationEntry;
 import com.yknx.android.club.data.ClubsContract.UserEntry;
@@ -26,7 +26,7 @@ public class TestProvider extends AndroidTestCase {
 
     public void deleteAllRecords() {
         mContext.getContentResolver().delete(
-                AssistEntry.CONTENT_URI,
+                ClubsContract.AttendanceEntry.CONTENT_URI,
                 null,
                 null
         );
@@ -47,7 +47,7 @@ public class TestProvider extends AndroidTestCase {
         );
 
         Cursor cursor = mContext.getContentResolver().query(
-                AssistEntry.CONTENT_URI,
+                ClubsContract.AttendanceEntry.CONTENT_URI,
                 null,
                 null,
                 null,
@@ -256,7 +256,7 @@ public class TestProvider extends AndroidTestCase {
 
         ContentValues assistValues = TestDb.createFakeAssist(registrationRowId1, 1);
         long assistRowId1;
-        assistRowId1 = ContentUris.parseId(mContentResolver.insert(AssistEntry.CONTENT_URI, assistValues));
+        assistRowId1 = ContentUris.parseId(mContentResolver.insert(ClubsContract.AttendanceEntry.CONTENT_URI, assistValues));
 
         assertTrue(assistRowId1 != -1);
         Log.d(LOG_TAG, "New assist id: " + assistRowId1);
@@ -264,7 +264,7 @@ public class TestProvider extends AndroidTestCase {
         assistValues = TestDb.createFakeAssist(registrationRowId2, 2);
 
         long assistRowId2;
-        assistRowId2 = ContentUris.parseId(mContentResolver.insert(AssistEntry.CONTENT_URI, assistValues));
+        assistRowId2 = ContentUris.parseId(mContentResolver.insert(ClubsContract.AttendanceEntry.CONTENT_URI, assistValues));
 
         assertTrue(assistRowId2 != -1);
         Log.d(LOG_TAG, "New assist id: " + assistRowId2);
@@ -272,9 +272,9 @@ public class TestProvider extends AndroidTestCase {
 
 // A cursor is your primary interface to the query results.
         Cursor assistCursor = mContentResolver.query(
-                AssistEntry.CONTENT_URI, // Table to Query
+                ClubsContract.AttendanceEntry.CONTENT_URI, // Table to Query
                 null,
-                AssistEntry.TABLE_NAME+"."+AssistEntry._ID + " = ? ", // Columns for the "where" clause
+                ClubsContract.AttendanceEntry.TABLE_NAME+"."+ ClubsContract.AttendanceEntry._ID + " = ? ", // Columns for the "where" clause
                 new String[]{assistRowId1 + ""}, // Values for the "where" clause
                 null
         );
@@ -282,9 +282,9 @@ public class TestProvider extends AndroidTestCase {
         TestDb.validateCursorAgainstContentValues(assistCursor, TestDb.createFakeAssist(registrationRowId1, 1));
 
         Cursor assistCursor2 = mContentResolver.query(
-                AssistEntry.CONTENT_URI, // Table to Query
+                ClubsContract.AttendanceEntry.CONTENT_URI, // Table to Query
                 null,
-                AssistEntry.TABLE_NAME+"."+AssistEntry._ID + " = ? ", // Columns for the "where" clause
+                ClubsContract.AttendanceEntry.TABLE_NAME+"."+ ClubsContract.AttendanceEntry._ID + " = ? ", // Columns for the "where" clause
                 new String[]{assistRowId2 + ""}, // Values for the "where" clause
                 null
         );

@@ -16,6 +16,15 @@
         <item name="android:fontFamily">sans-serif-condensed</item>
         <item name="android:textAppearance">@android:style/TextAppearance.DeviceDefault.Large</item>
     </style>
+    <style name="condensed_very_large" >
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:textAppearance">@style/text_appeareance_verylarge</item>
+    </style>
+
+    <style name="text_appeareance_verylarge" parent="android:TextAppearance.DeviceDefault.Large">
+        <item name="android:textSize">20dp</item>
+    </style>
+
     <style name="FloatingActionButton">
 
     </style>

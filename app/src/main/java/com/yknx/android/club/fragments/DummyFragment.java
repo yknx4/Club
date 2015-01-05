@@ -12,11 +12,21 @@ import com.yknx.android.club.R;
 
 public class DummyFragment extends Fragment {
 
+    private boolean overrideLayout = false;
+
+    public void setLayout(int layout) {
+
+        overrideLayout=true;
+        this.layout = layout;
+    }
+
+    int layout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.dummy_fragment, null);
+        if(overrideLayout) return inflater.inflate(layout, null);
+        return inflater.inflate(R.layout.fragment_dummy, null);
     }
 
     @Override

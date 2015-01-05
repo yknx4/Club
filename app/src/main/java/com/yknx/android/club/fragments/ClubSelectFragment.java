@@ -247,7 +247,7 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
     public void deleteAllRecords() {
         Context mContext = getActivity();
         mContext.getContentResolver().delete(
-                ClubsContract.AssistEntry.CONTENT_URI,
+                ClubsContract.AttendanceEntry.CONTENT_URI,
                 null,
                 null
         );
@@ -322,13 +322,13 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
 
         ContentValues assistValues = Utility.createFakeAssist(registrationRowId1, 1);
         long assistRowId1;
-        assistRowId1 = ContentUris.parseId(mContentResolver.insert(ClubsContract.AssistEntry.CONTENT_URI, assistValues));
+        assistRowId1 = ContentUris.parseId(mContentResolver.insert(ClubsContract.AttendanceEntry.CONTENT_URI, assistValues));
         Log.d(LOG_TAG, "New assist id: " + assistRowId1);
 
         assistValues = Utility.createFakeAssist(registrationRowId2, 2);
 
         long assistRowId2;
-        assistRowId2 = ContentUris.parseId(mContentResolver.insert(ClubsContract.AssistEntry.CONTENT_URI, assistValues));
+        assistRowId2 = ContentUris.parseId(mContentResolver.insert(ClubsContract.AttendanceEntry.CONTENT_URI, assistValues));
         Log.d(LOG_TAG, "New assist id: " + assistRowId2);
 
 

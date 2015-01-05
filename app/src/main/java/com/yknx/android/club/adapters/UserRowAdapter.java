@@ -7,7 +7,6 @@ import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,7 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.yknx.android.club.R;
-import com.yknx.android.club.Tasks.GetAttendancesTask;
+import com.yknx.android.club.tasks.GetAttendancesTask;
 import com.yknx.android.club.callbacks.UserRowAdapterCallbacks;
 import com.yknx.android.club.controller.UserController;
 import com.yknx.android.club.data.ClubsContract;
@@ -30,10 +29,7 @@ import com.yknx.android.club.model.User;
 import com.yknx.android.club.util.Preferences;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 public class UserRowAdapter extends RecyclerView.Adapter<UserRowAdapter.ViewHolder> implements Filterable, LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -108,6 +104,7 @@ public class UserRowAdapter extends RecyclerView.Adapter<UserRowAdapter.ViewHold
             public void onClick(View v) {
                 if(userRowAdapterCallbacks!=null){
                     userRowAdapterCallbacks.onAttendanceAdd(object.getId());
+                    holder.userRowAttendanceTextview.setVisibility(View.VISIBLE);
                 }
             }
         });

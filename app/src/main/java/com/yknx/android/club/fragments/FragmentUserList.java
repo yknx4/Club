@@ -2,6 +2,8 @@ package com.yknx.android.club.fragments;
 
 
 import android.app.Fragment;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
@@ -10,21 +12,25 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import com.yknx.android.club.R;
+import com.yknx.android.club.Utility;
 import com.yknx.android.club.adapters.UserRowAdapter;
 import com.yknx.android.club.callbacks.UserRowAdapterCallbacks;
+import com.yknx.android.club.data.ClubsContract;
 import com.yknx.android.club.model.Club;
 import com.yknx.android.club.model.User;
 import com.yknx.android.club.util.DividerItemDecoration;
 
-public class FragmentUserList extends Fragment implements UserRowAdapterCallbacks{
+public class FragmentUserList extends Fragment {
 
 private static final String LOG_TAG = FragmentUserList.class.getSimpleName();
 
     private RecyclerView userRecyclerview;
     private UserRowAdapter mAdapter;
     private Club mClub;
+    private UserRowAdapterCallbacks adapterCallback;
 
 
     @Override
@@ -56,7 +62,7 @@ private static final String LOG_TAG = FragmentUserList.class.getSimpleName();
 
 
         mAdapter = new UserRowAdapter(getActivity(),mClub);
-        mAdapter.setUserRowAdapterCallbacks(this);
+        if(adapterCallback!=null) mAdapter.setUserRowAdapterCallbacks(adapterCallback);
         userRecyclerview.setAdapter(mAdapter);
 
     }
@@ -64,7 +70,7 @@ private static final String LOG_TAG = FragmentUserList.class.getSimpleName();
     @Override
     public void onResume() {
         super.onResume();
-        mAdapter.setUserRowAdapterCallbacks(this);
+        if(adapterCallback!=null) mAdapter.setUserRowAdapterCallbacks(adapterCallback);
     }
 
     @Override
@@ -79,14 +85,11 @@ private static final String LOG_TAG = FragmentUserList.class.getSimpleName();
     }
 
 
-
-    @Override
-    public void onUserClick(User user,int position) {
-        Log.d(LOG_TAG,"Click on "+user.getName()+" on position "+position+".");
+    public void setAdapterCallback(UserRowAdapterCallbacks adapterCallback) {
+        this.adapterCallback = adapterCallback;
     }
 
-    @Override
-    public void onAttendanceAdd(Long userId) {
-        Log.d(LOG_TAG,"Attendance added to "+userId+" on club "+mClub.name+".");
+    public UserRowAdapterCallbacks getAdapterCallback() {
+        return adapterCallback;
     }
 }

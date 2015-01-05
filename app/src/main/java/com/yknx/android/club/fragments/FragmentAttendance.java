@@ -2,6 +2,8 @@ package com.yknx.android.club.fragments;
 
 
 import android.app.Fragment;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.support.v7.widget.CardView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,12 +15,19 @@ import android.os.Bundle;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.yknx.android.club.R;
+import com.yknx.android.club.Utility;
+import com.yknx.android.club.callbacks.UserRowAdapterCallbacks;
+import com.yknx.android.club.data.ClubsContract;
+import com.yknx.android.club.data.ClubsProvider;
 import com.yknx.android.club.model.Club;
+import com.yknx.android.club.model.User;
 import com.yknx.android.club.util.FragmentUtility;
+import com.yknx.android.club.util.Preferences;
 
-public class FragmentAttendance extends Fragment {
+public class FragmentAttendance extends Fragment implements UserRowAdapterCallbacks{
 
     private static final String LOG_TAG = FragmentAttendance.class.getSimpleName();
 
@@ -66,6 +75,7 @@ public class FragmentAttendance extends Fragment {
         topContainer.setVisibility(View.VISIBLE);
         FragmentUserList fragmentUserList = new FragmentUserList();
         fragmentUserList.setClub(mClub);
+        fragmentUserList.setAdapterCallback(this);
         currentUserList = fragmentUserList;
         FragmentUtility.replaceFragment(R.id.top_container, currentUserList, getActivity());
         customTextWatcher.setParent((FragmentUserList) currentUserList);
@@ -73,7 +83,9 @@ public class FragmentAttendance extends Fragment {
 
     private void createUserInfo(){
         bottomContainer.setVisibility(View.VISIBLE);
-        currentUserInfo = new DummyFragment();
+        DummyFragment dummyFragment = new DummyFragment();
+        currentUserInfo = dummyFragment;
+        dummyFragment.setLayout(R.layout.fragment_user_details);
         FragmentUtility.replaceFragment(R.id.bottom_container, currentUserInfo, getActivity());
     }
     private void deleteUserInfo() {
@@ -92,6 +104,29 @@ public class FragmentAttendance extends Fragment {
         FragmentUtility.deleteFragment(currentUserList, getActivity());
         currentUserList = null;
 
+    }
+
+
+    @Override
+    public void onUserClick(User user,int position) {
+        Log.d(LOG_TAG,"Click on "+user.getName()+" on position "+position+".");
+    }
+
+    @Override
+    public void onAttendanceAdd(Long userId) {
+        String attendanceMessage = "Attendance added to " + userId + " on club " + mClub.name + ".";
+        Log.d(LOG_TAG, attendanceMessage);
+        long registration = ClubsProvider.getRegistration(getActivity(),mClub.id,userId);
+        if(registration == ClubsContract.RegistrationEntry.NO_REGISTRATION){
+            ContentValues registrationValues = Utility.createRegistration(mClub.id,userId);
+            registration = ContentUris.parseId(getActivity().getContentResolver().insert(ClubsContract.RegistrationEntry.CONTENT_URI, registrationValues));
+        }
+        ContentValues assist = Utility.createAssist(registration, Preferences.getSelectedTerm(getActivity(),mClub.id));
+        long assistRowId = ContentUris.parseId(getActivity().getContentResolver().insert(ClubsContract.AttendanceEntry.CONTENT_URI, assist));
+        if(assistRowId!=-1){
+            Toast.makeText(getActivity(), attendanceMessage, Toast.LENGTH_SHORT).show();
+           digitsEditText.setText("");
+        }
     }
 
 
@@ -164,6 +199,8 @@ public class FragmentAttendance extends Fragment {
         public void afterTextChanged(Editable s) {
 
         }
+
+
     }
 
 }

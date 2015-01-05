@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
 
     android:gravity="center_vertical"
     android:minHeight="?android:attr/listPreferredItemHeight"
-    android:background="?android:attr/selectableItemBackground"
-    >
+    android:background="?android:attr/selectableItemBackground">
 
     <LinearLayout
-        android:layout_width="64sp"
-        android:layout_height="64sp"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
         android:gravity="center"
         >
         <ImageView
-            android:layout_width="48sp"
-            android:layout_height="48sp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
 
             android:id="@+id/user_row_icon"
             android:layout_gravity="center"
@@ -40,13 +40,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Person Name"
+                tools:text="Person Name"
                 android:id="@+id/user_row_name_textview"
                 style="@style/condensed_large" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="9"
+                tools:text="9"
                 android:paddingLeft="8dp"
                 android:fontFamily="sans-serif-condensed"
                 android:id="@+id/user_row_attendances_textview"
@@ -58,7 +58,7 @@
                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Account Number"
+                    tools:text="Account Number"
                     android:fontFamily="sans-serif-condensed"
                     android:id="@+id/user_row_account_textview"
                     android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small" />

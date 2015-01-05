@@ -197,14 +197,14 @@ public class DetailAssistFragment extends Fragment implements LoaderManager.Load
                 toRegister=false;
             }
             ContentValues assist = Utility.createAssist(mRegistration, mTerm);
-            long assistRowId = ContentUris.parseId(mContentResolver.insert(ClubsContract.AssistEntry.CONTENT_URI, assist));
+            long assistRowId = ContentUris.parseId(mContentResolver.insert(ClubsContract.AttendanceEntry.CONTENT_URI, assist));
             if(assistRowId!=-1){
                 removeFragment(currentFragment);
                 Toast.makeText(getActivity(), "Assist added to " + mAccount + ".", Toast.LENGTH_SHORT).show();
                 account.setText("");
             }
         }
-        ;
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event

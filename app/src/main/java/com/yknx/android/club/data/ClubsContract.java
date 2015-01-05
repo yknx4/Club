@@ -170,7 +170,7 @@ public class ClubsContract {
 
     }
 
-    public static final class AssistEntry implements BaseColumns {
+    public static final class AttendanceEntry implements BaseColumns {
         /*
        *   ACCESABLE VIA
        *  /assists

@@ -8,7 +8,6 @@ import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 
 import android.view.LayoutInflater;
@@ -19,7 +18,7 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import com.yknx.android.club.R;
-import com.yknx.android.club.Tasks.GetAttendancesTask;
+import com.yknx.android.club.tasks.GetAttendancesTask;
 import com.yknx.android.club.data.ClubsContract;
 import com.yknx.android.club.model.User;
 
@@ -192,15 +191,15 @@ public class UtilityUserAssistsFragment extends Fragment implements LoaderManage
             mUserAssists = cursor;
             TextView userAssistCount = (TextView) mCurrentView.findViewById(R.id.userview_assist_count_textview);
             final String[] columns = new String[]{
-                    ClubsContract.AssistEntry.COLUMN_ASSIST_DATE
+                    ClubsContract.AttendanceEntry.COLUMN_ASSIST_DATE
             };
 
             final int[] to = new int[]{
-                    R.id.list_item_assistitem_date
+                    R.id.list_item
             };
             assistDataAdapter = new SimpleCursorAdapter(
                     getActivity(),
-                    R.layout.list_item_assistitem,
+                    R.layout.attendance_row,
                     mUserAssists,
                     columns,
                     to,
@@ -211,9 +210,9 @@ public class UtilityUserAssistsFragment extends Fragment implements LoaderManage
                 public boolean setViewValue(View view, Cursor cursor, int i) {
 
                     switch (view.getId()){
-                        case R.id.list_item_assistitem_date:{
+                        case R.id.attendance_date:{
                             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-                            Date assDate = ClubsContract.getDateFromDb(cursor.getString(cursor.getColumnIndex(ClubsContract.AssistEntry.COLUMN_ASSIST_DATE)));
+                            Date assDate = ClubsContract.getDateFromDb(cursor.getString(cursor.getColumnIndex(ClubsContract.AttendanceEntry.COLUMN_ASSIST_DATE)));
                             //g.d(LOG_TAG,cursor.getString(COLUMN_DATE));
                             String newDateString = new SimpleDateFormat("EEEE, d/MMMM/yyyy").format(assDate);
 

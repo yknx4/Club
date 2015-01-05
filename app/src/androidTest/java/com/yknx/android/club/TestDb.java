@@ -9,8 +9,8 @@ import android.os.Build;
 import android.test.AndroidTestCase;
 import android.util.Log;
 
+import com.yknx.android.club.data.ClubsContract;
 import com.yknx.android.club.data.ClubsDbHelper;
-import com.yknx.android.club.data.ClubsContract.AssistEntry;
 import com.yknx.android.club.data.ClubsContract.ClubEntry;
 import com.yknx.android.club.data.ClubsContract.RegistrationEntry;
 import com.yknx.android.club.data.ClubsContract.UserEntry;
@@ -89,9 +89,9 @@ public class TestDb extends AndroidTestCase {
     public   static ContentValues createFakeAssist(long registrationId, int term) {
         ContentValues testValues = new ContentValues();
 
-        testValues.put(AssistEntry.COLUMN_ASSIST_REGISTRATION,registrationId);
-        testValues.put(AssistEntry.COLUMN_ASSIST_TERM, term);
-        testValues.put(AssistEntry.COLUMN_ASSIST_DATE, "20140910");
+        testValues.put(ClubsContract.AttendanceEntry.COLUMN_ASSIST_REGISTRATION,registrationId);
+        testValues.put(ClubsContract.AttendanceEntry.COLUMN_ASSIST_TERM, term);
+        testValues.put(ClubsContract.AttendanceEntry.COLUMN_ASSIST_DATE, "20140910");
         return testValues;
     }
 
@@ -267,7 +267,7 @@ public class TestDb extends AndroidTestCase {
 
         ContentValues assistValues = createFakeAssist(registrationRowId1,1);
         long assistRowId1;
-        assistRowId1 = db.insert(AssistEntry.TABLE_NAME, null, assistValues);
+        assistRowId1 = db.insert(ClubsContract.AttendanceEntry.TABLE_NAME, null, assistValues);
 
         assertTrue(assistRowId1 != -1);
         Log.d(LOG_TAG, "New assist id: " + assistRowId1);
@@ -275,7 +275,7 @@ public class TestDb extends AndroidTestCase {
         assistValues = createFakeAssist(registrationRowId2,2);
 
         long assistRowId2;
-        assistRowId2 = db.insert(AssistEntry.TABLE_NAME, null, assistValues);
+        assistRowId2 = db.insert(ClubsContract.AttendanceEntry.TABLE_NAME, null, assistValues);
 
         assertTrue(assistRowId2 != -1);
         Log.d(LOG_TAG, "New assist id: " + assistRowId2);
@@ -283,18 +283,18 @@ public class TestDb extends AndroidTestCase {
 
 
         String[] assistColumns = {
-                AssistEntry._ID,
+                ClubsContract.AttendanceEntry._ID,
 
-                AssistEntry.COLUMN_ASSIST_REGISTRATION,
-                AssistEntry.COLUMN_ASSIST_DATE,
-                AssistEntry.COLUMN_ASSIST_TERM
+                ClubsContract.AttendanceEntry.COLUMN_ASSIST_REGISTRATION,
+                ClubsContract.AttendanceEntry.COLUMN_ASSIST_DATE,
+                ClubsContract.AttendanceEntry.COLUMN_ASSIST_TERM
 
         };
 // A cursor is your primary interface to the query results.
         Cursor assistCursor = db.query(
-                AssistEntry.TABLE_NAME, // Table to Query
+                ClubsContract.AttendanceEntry.TABLE_NAME, // Table to Query
                 assistColumns,
-                AssistEntry._ID + " = ? ", // Columns for the "where" clause
+                ClubsContract.AttendanceEntry._ID + " = ? ", // Columns for the "where" clause
                 new String[]{assistRowId1 + ""}, // Values for the "where" clause
                 null, // clubColumns to group by
                 null, // clubColumns to filter by row groups
@@ -304,9 +304,9 @@ public class TestDb extends AndroidTestCase {
         TestDb.validateCursorAgainstContentValues(assistCursor, createFakeAssist(registrationRowId1,1));
 
         Cursor assistCursor2 = db.query(
-                AssistEntry.TABLE_NAME, // Table to Query
+                ClubsContract.AttendanceEntry.TABLE_NAME, // Table to Query
                 assistColumns,
-                AssistEntry._ID + " = ? ", // Columns for the "where" clause
+                ClubsContract.AttendanceEntry._ID + " = ? ", // Columns for the "where" clause
                 new String[]{assistRowId2 + ""}, // Values for the "where" clause
                 null, // clubColumns to group by
                 null, // clubColumns to filter by row groups

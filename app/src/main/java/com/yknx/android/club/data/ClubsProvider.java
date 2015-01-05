@@ -14,7 +14,6 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.yknx.android.club.Utility;
-import com.yknx.android.club.data.ClubsContract.AssistEntry;
 import com.yknx.android.club.data.ClubsContract.ClubEntry;
 import com.yknx.android.club.data.ClubsContract.RegistrationEntry;
 import com.yknx.android.club.data.ClubsContract.UserEntry;
@@ -54,10 +53,10 @@ public class ClubsProvider extends ContentProvider {
     static {
         sAssistQueryBuilder = new SQLiteQueryBuilder();
         sAssistQueryBuilder.setTables(
-                AssistEntry.TABLE_NAME + " INNER JOIN " +
+                ClubsContract.AttendanceEntry.TABLE_NAME + " INNER JOIN " +
                         RegistrationEntry.TABLE_NAME +
-                        " ON " + AssistEntry.TABLE_NAME +
-                        "." + AssistEntry.COLUMN_ASSIST_REGISTRATION +
+                        " ON " + ClubsContract.AttendanceEntry.TABLE_NAME +
+                        "." + ClubsContract.AttendanceEntry.COLUMN_ASSIST_REGISTRATION +
                         " = " + RegistrationEntry.TABLE_NAME +
                         "." + RegistrationEntry._ID
         );
@@ -115,10 +114,10 @@ public class ClubsProvider extends ContentProvider {
         addMatchUri(matcher,ClubsContract.PATH_REGISTRATIONS+"/"+RegistrationEntry.ID_PATH+"/#",REGISTRATION_ID);
 
         addMatchUri(matcher, ClubsContract.PATH_ASSISTS, ASSIST);
-        addMatchUri(matcher, ClubsContract.PATH_ASSISTS + "/" + AssistEntry.REGISTRATION_PATH + "/#", ASSIST_WITH_REGISTRATION);
-        addMatchUri(matcher, ClubsContract.PATH_ASSISTS + "/" + AssistEntry.REGISTRATION_PATH + "/#/#", ASSIST_WITH_REGISTRATION_AND_TERM);
-        addMatchUri(matcher, ClubsContract.PATH_ASSISTS + "/" + AssistEntry.DATE_PATH + "/*", ASSIST_WITH_DATE);
-        addMatchUri(matcher, ClubsContract.PATH_ASSISTS + "/" + AssistEntry.ID_PATH + "/#", ASSIST_ID);
+        addMatchUri(matcher, ClubsContract.PATH_ASSISTS + "/" + ClubsContract.AttendanceEntry.REGISTRATION_PATH + "/#", ASSIST_WITH_REGISTRATION);
+        addMatchUri(matcher, ClubsContract.PATH_ASSISTS + "/" + ClubsContract.AttendanceEntry.REGISTRATION_PATH + "/#/#", ASSIST_WITH_REGISTRATION_AND_TERM);
+        addMatchUri(matcher, ClubsContract.PATH_ASSISTS + "/" + ClubsContract.AttendanceEntry.DATE_PATH + "/*", ASSIST_WITH_DATE);
+        addMatchUri(matcher, ClubsContract.PATH_ASSISTS + "/" + ClubsContract.AttendanceEntry.ID_PATH + "/#", ASSIST_ID);
 
 
         //matcher.addURI(URI_AUTORITHY,WeatherContract.PATH_WEATHER, ASSIST);
@@ -194,7 +193,7 @@ public class ClubsProvider extends ContentProvider {
                 break;
             }
             case ASSIST_ID:{
-                retCursor = basicQueryWithId(AssistEntry.TABLE_NAME,AssistEntry._ID,ContentUris.parseId(uri),projection,sortOrder);
+                retCursor = basicQueryWithId(ClubsContract.AttendanceEntry.TABLE_NAME, ClubsContract.AttendanceEntry._ID,ContentUris.parseId(uri),projection,sortOrder);
                 break;
             }
             case REGISTRATION_ID:{
@@ -225,24 +224,24 @@ public class ClubsProvider extends ContentProvider {
             }
             case ASSIST_WITH_REGISTRATION: {
                 long registration = ContentUris.parseId(uri);
-                String customSelection = AssistEntry.COLUMN_ASSIST_REGISTRATION + " = ?";
+                String customSelection = ClubsContract.AttendanceEntry.COLUMN_ASSIST_REGISTRATION + " = ?";
                 String[] customSelectionArgs = new String[]{registration + ""};
                 retCursor = basicQueryWithDbAndQueryBuilder(sAssistQueryBuilder,mOpenHelper.getWritableDatabase(),projection,customSelection,customSelectionArgs,sortOrder);
 //                retCursor = basicQuery(RegistrationEntry.TABLE_NAME, projection, customSelection, customSelectionArgs, sortOrder);
                 break;
             }
             case ASSIST_WITH_REGISTRATION_AND_TERM: {
-                String registration = AssistEntry.getRegistrationFromUri(uri);
+                String registration = ClubsContract.AttendanceEntry.getRegistrationFromUri(uri);
                 long term = ContentUris.parseId(uri);
-                String customSelection = AssistEntry.COLUMN_ASSIST_REGISTRATION + " = ? AND " +
-                        AssistEntry.COLUMN_ASSIST_TERM + " = ? ";
+                String customSelection = ClubsContract.AttendanceEntry.COLUMN_ASSIST_REGISTRATION + " = ? AND " +
+                        ClubsContract.AttendanceEntry.COLUMN_ASSIST_TERM + " = ? ";
                 String[] customSelectionArgs = new String[]{registration, term + ""};
                 retCursor = basicQueryWithDbAndQueryBuilder(sAssistQueryBuilder,mOpenHelper.getWritableDatabase(),projection,customSelection,customSelectionArgs,sortOrder);
                 break;
             }
             case ASSIST_WITH_DATE: {
-                String date = AssistEntry.getDateFromUri(uri);
-                String customSelection = AssistEntry.COLUMN_ASSIST_DATE + " = ?";
+                String date = ClubsContract.AttendanceEntry.getDateFromUri(uri);
+                String customSelection = ClubsContract.AttendanceEntry.COLUMN_ASSIST_DATE + " = ?";
                 String[] customSelectionArgs = new String[]{date};
                 retCursor = basicQueryWithDbAndQueryBuilder(sAssistQueryBuilder,mOpenHelper.getWritableDatabase(),projection,customSelection,customSelectionArgs,sortOrder);
                 break;
@@ -279,12 +278,12 @@ public class ClubsProvider extends ContentProvider {
                 return RegistrationEntry.CONTENT_TYPE;
 
             case ASSIST_ID:
-                return  AssistEntry.CONTENT_ITEM_TYPE;
+                return  ClubsContract.AttendanceEntry.CONTENT_ITEM_TYPE;
             case ASSIST:
             case ASSIST_WITH_REGISTRATION:
             case ASSIST_WITH_REGISTRATION_AND_TERM:
             case ASSIST_WITH_DATE:
-                return AssistEntry.CONTENT_TYPE;
+                return ClubsContract.AttendanceEntry.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -298,9 +297,9 @@ public class ClubsProvider extends ContentProvider {
         final int match = mUriMatcher.match(uri);
         switch (match) {
             case ASSIST:
-                _id = db.insert(AssistEntry.TABLE_NAME, null, contentValues);
+                _id = db.insert(ClubsContract.AttendanceEntry.TABLE_NAME, null, contentValues);
                 if (_id > 0) {
-                    returnUri = AssistEntry.builAssistUri(_id);
+                    returnUri = ClubsContract.AttendanceEntry.builAssistUri(_id);
                 } else throw new SQLException("Failed to insert row into " + uri);
                 break;
             case CLUB:
@@ -337,9 +336,9 @@ public class ClubsProvider extends ContentProvider {
         switch (match) {
 
             case ASSIST:
-                affected = db.delete(AssistEntry.TABLE_NAME, selection, selectionArgs);
+                affected = db.delete(ClubsContract.AttendanceEntry.TABLE_NAME, selection, selectionArgs);
                 if (affected > 0) {
-                    toNotify = AssistEntry.CONTENT_URI;
+                    toNotify = ClubsContract.AttendanceEntry.CONTENT_URI;
                 } else Log.w(LOG_TAG, "Failed to delete  " + uri);
                 break;
 

@@ -3,9 +3,7 @@ package com.yknx.android.club.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
-import com.yknx.android.club.data.ClubsContract.AssistEntry;
 import com.yknx.android.club.data.ClubsContract.ClubEntry;
 import com.yknx.android.club.data.ClubsContract.RegistrationEntry;
 import com.yknx.android.club.data.ClubsContract.UserEntry;
@@ -97,23 +95,23 @@ public class ClubsDbHelper extends SQLiteOpenHelper {
                 " UNIQUE (" + RegistrationEntry.COLUMN_REGISTRATION_CLUB + ", " +
                 RegistrationEntry.COLUMN_REGISTRATION_USER + ") ON CONFLICT IGNORE);";
 
-        final String SQL_CREATE_ASSISTS_TABLE = "CREATE TABLE " + AssistEntry.TABLE_NAME + " (" +
+        final String SQL_CREATE_ASSISTS_TABLE = "CREATE TABLE " + ClubsContract.AttendanceEntry.TABLE_NAME + " (" +
                 // Why AutoIncrement here, and not above?
                 // Unique keys will be auto-generated in either case.  But for weather
                 // forecasting, it's reasonable to assume the user will want information
                 // for a certain date and all dates *following*, so the forecast com.yknx.sunshineapp.data
                 // should be sorted accordingly.
-                AssistEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                ClubsContract.AttendanceEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
 
                 // the ID of the location entry associated with this weather com.yknx.sunshineapp.data
 
-                AssistEntry.COLUMN_ASSIST_DATE + " TEXT NOT NULL, " +
-                AssistEntry.COLUMN_ASSIST_REGISTRATION + " INTEGER NOT NULL, " +
-                AssistEntry.COLUMN_ASSIST_TERM + " INTEGER NOT NULL, " +
+                ClubsContract.AttendanceEntry.COLUMN_ASSIST_DATE + " TEXT NOT NULL, " +
+                ClubsContract.AttendanceEntry.COLUMN_ASSIST_REGISTRATION + " INTEGER NOT NULL, " +
+                ClubsContract.AttendanceEntry.COLUMN_ASSIST_TERM + " INTEGER NOT NULL, " +
 
 
                 // Set up the location column as a foreign key to location table.
-                " FOREIGN KEY (" + AssistEntry.COLUMN_ASSIST_REGISTRATION + ") REFERENCES " +
+                " FOREIGN KEY (" + ClubsContract.AttendanceEntry.COLUMN_ASSIST_REGISTRATION + ") REFERENCES " +
                 RegistrationEntry.TABLE_NAME + " (" + RegistrationEntry._ID + ") " +
 
 
