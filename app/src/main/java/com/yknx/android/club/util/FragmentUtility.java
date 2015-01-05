@@ -17,17 +17,18 @@ public class FragmentUtility {
 private static final String LOG_TAG = FragmentUtility.class.getSimpleName();
     public static void replaceFragment(int id, Fragment fragment, Context source) {
         FragmentManager fm = ((Activity) source).getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(id, fragment);
-        ft.commit();
+        replaceFragment(id,fragment,fm);
 
     }
 
     public static void deleteFragment(Fragment fragment, Context source) {
         FragmentManager fm = ((Activity) source).getFragmentManager();
+
+    }
+
+    public static void replaceFragment(int id, Fragment fragment, FragmentManager fm) {
         FragmentTransaction ft = fm.beginTransaction();
-        ft.remove(fragment);
-        ft.commitAllowingStateLoss();
-        Log.d(LOG_TAG, "Fragment destroyed.");
+        ft.replace(id, fragment);
+        ft.commit();
     }
 }

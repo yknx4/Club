@@ -14,6 +14,7 @@ public class UserController {
         User result = new User();
         String name = c.getString(c.getColumnIndex(ClubsContract.UserEntry.COLUMN_USER_NAME));
         String account = c.getString(c.getColumnIndex(ClubsContract.UserEntry.COLUMN_USER_ACCOUNT));
+        String email = c.getString(c.getColumnIndex(ClubsContract.UserEntry.COLUMN_USER_EMAIL));
         Long id = c.getLong(c.getColumnIndex(ClubsContract.UserEntry._ID));
         result.setName(name);
         result.setAccount(account);

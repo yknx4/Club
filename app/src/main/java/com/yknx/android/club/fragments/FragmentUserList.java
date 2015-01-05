@@ -31,11 +31,13 @@ private static final String LOG_TAG = FragmentUserList.class.getSimpleName();
     private UserRowAdapter mAdapter;
     private Club mClub;
     private UserRowAdapterCallbacks adapterCallback;
+    String lastFilter="";
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d(LOG_TAG, "onCreateView");
         View finalView = inflater.inflate(R.layout.fragment_user_list, null);
 
         return finalView;
@@ -45,11 +47,13 @@ private static final String LOG_TAG = FragmentUserList.class.getSimpleName();
     public void filter(CharSequence cs){
         Log.d(LOG_TAG,"Filtering with: "+cs);
         if(mAdapter!=null)mAdapter.getFilter().filter(cs);
+        lastFilter=cs.toString();
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.d(LOG_TAG, "onViewCreated");
 
         userRecyclerview = (RecyclerView) view.findViewById(R.id.user_recyclerview);
         userRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -62,21 +66,28 @@ private static final String LOG_TAG = FragmentUserList.class.getSimpleName();
 
 
         mAdapter = new UserRowAdapter(getActivity(),mClub);
-        if(adapterCallback!=null) mAdapter.setUserRowAdapterCallbacks(adapterCallback);
         userRecyclerview.setAdapter(mAdapter);
+        if(adapterCallback!=null) mAdapter.setUserRowAdapterCallbacks(adapterCallback);
+
+
+
 
     }
 
     @Override
     public void onResume() {
+        Log.d(LOG_TAG, "onResume");
         super.onResume();
+        if(mAdapter!=null)mAdapter.getFilter().filter(lastFilter);
         if(adapterCallback!=null) mAdapter.setUserRowAdapterCallbacks(adapterCallback);
+
     }
 
     @Override
     public void onPause() {
         super.onPause();
         mAdapter.setUserRowAdapterCallbacks(null);
+        userRecyclerview.swapAdapter(null,true);
     }
 
     public void setClub(Club club) {

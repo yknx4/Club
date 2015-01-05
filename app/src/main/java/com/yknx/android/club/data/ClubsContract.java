@@ -26,7 +26,7 @@ public class ClubsContract {
         dateString = dateString.replaceAll("/", "");
         SimpleDateFormat dbDateFormat = new SimpleDateFormat("yyyyMMdd");
         try {
-            Log.d(LOG_TAG,"getDateFromDb: "+dateString);
+            Log.v(LOG_TAG,"getDateFromDb: "+dateString);
             return dbDateFormat.parse(dateString);
         } catch (ParseException e) {
             e.printStackTrace();
@@ -41,7 +41,7 @@ public class ClubsContract {
 // it must be converted to milliseconds in order to be converted to valid date.
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
         String red = sdf.format(date);
-        Log.d(LOG_TAG,"getDbDateString: "+red);
+        Log.v(LOG_TAG,"getDbDateString: "+red);
 
         return red;
     }
@@ -102,12 +102,12 @@ public class ClubsContract {
         public static final String COLUMN_USER_NOTE = "note";
         public static Uri buildUserUri(long id) {
             Uri contentUri = CONTENT_URI.buildUpon().appendPath(ID_PATH).build();
-            Log.d(LOG_TAG,"buildUserUri(long): "+contentUri+ " with id "+id);
+            Log.v(LOG_TAG,"buildUserUri(long): "+contentUri+ " with id "+id);
             return ContentUris.withAppendedId(contentUri, id);
         }
         public static Uri builUserUriWithAccount(String account) {
             Uri finalUri =CONTENT_URI.buildUpon().appendPath(ACCOUNT_PATH).appendPath(account).build();
-            Log.d(LOG_TAG,"buildUserUriWithAccount(String): "+finalUri);
+            Log.v(LOG_TAG,"buildUserUriWithAccount(String): "+finalUri);
             return finalUri;
 
         }
@@ -143,19 +143,19 @@ public class ClubsContract {
 
         public static Uri builRegistrationUriWithClub(long id) {
             Uri contentUri = CONTENT_URI.buildUpon().appendPath(CLUB_PATH).build();
-            Log.d(LOG_TAG,"buildRegistrationUriWithClub(long): "+contentUri+ " with id "+id);
+            Log.v(LOG_TAG,"buildRegistrationUriWithClub(long): "+contentUri+ " with id "+id);
             return ContentUris.withAppendedId(contentUri, id);
         }
 
         public static Uri builRegistrationUriWithUser(long id) {
             Uri contentUri = CONTENT_URI.buildUpon().appendPath(USER_PATH).build();
-            Log.d(LOG_TAG,"buildRegistrationUriWithUser(long): "+contentUri+ " with id "+id);
+            Log.v(LOG_TAG,"buildRegistrationUriWithUser(long): "+contentUri+ " with id "+id);
             return ContentUris.withAppendedId(contentUri, id);
         }
 
         public static Uri builRegistrationUri(long id) {
             Uri contentUri = CONTENT_URI.buildUpon().appendPath(ID_PATH).build();
-            Log.d(LOG_TAG,"buildRegistrationUri(long): "+contentUri+ " with id "+id);
+            Log.v(LOG_TAG,"buildRegistrationUri(long): "+contentUri+ " with id "+id);
             return ContentUris.withAppendedId(contentUri, id);
         }
 
@@ -197,24 +197,24 @@ public class ClubsContract {
 
         public static Uri buildAssistUriWithRegistration(long id) {
             Uri contentUri = CONTENT_URI.buildUpon().appendPath(REGISTRATION_PATH).build();
-            Log.d(LOG_TAG,"buildAssistUriWithRegistration(long): "+contentUri+ " with id "+id);
+            Log.v(LOG_TAG,"buildAssistUriWithRegistration(long): "+contentUri+ " with id "+id);
             return ContentUris.withAppendedId(contentUri, id);
         }
         public static Uri buildAssistUriWithRegistrationAndTerm(long id, int term){
             Uri finalUri = ContentUris.withAppendedId(buildAssistUriWithRegistration(id),term);
-            Log.d(LOG_TAG,"buildAssistUriWithRegistrationAndTerm(long, int): "+finalUri);
+            Log.v(LOG_TAG,"buildAssistUriWithRegistrationAndTerm(long, int): "+finalUri);
             return  finalUri;
         }
 
         public static Uri buildAssistUriWithDate(String date) {
             Uri finalUri =CONTENT_URI.buildUpon().appendPath(DATE_PATH).appendPath(date).build();
-            Log.d(LOG_TAG,"buildAssistUriWithDate(String): "+finalUri);
+            Log.v(LOG_TAG,"buildAssistUriWithDate(String): "+finalUri);
             return finalUri;
 
         }
         public static Uri builAssistUri(long id) {
             Uri contentUri = CONTENT_URI.buildUpon().appendPath(ID_PATH).build();
-            Log.d(LOG_TAG,"buildRegistrationUri(long): "+contentUri+ " with id "+id);
+            Log.v(LOG_TAG,"buildRegistrationUri(long): "+contentUri+ " with id "+id);
             return ContentUris.withAppendedId(contentUri, id);
         }
         public static String getRegistrationFromUri(Uri uri){

@@ -22,6 +22,8 @@ public class User {
 
     private String name;
     private String account;
+    private String email;
+    private String campus;
     private long id;
 
     public int getAttendances() {
@@ -40,5 +42,21 @@ public class User {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getCampus() {
+        return campus;
+    }
+
+    public void setCampus(String campus) {
+        this.campus = campus;
     }
 }

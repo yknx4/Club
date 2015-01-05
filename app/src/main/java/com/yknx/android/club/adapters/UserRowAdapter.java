@@ -47,6 +47,10 @@ public class UserRowAdapter extends RecyclerView.Adapter<UserRowAdapter.ViewHold
 
     private UserRowAdapterCallbacks userRowAdapterCallbacks;
 
+    public void refresh() {
+        notifyDataSetChanged();
+    }
+
     private Context context;
     private LayoutInflater layoutInflater;
     private LoaderManager mLoaderManager;
@@ -55,8 +59,8 @@ public class UserRowAdapter extends RecyclerView.Adapter<UserRowAdapter.ViewHold
 
     public UserRowAdapter(Context context, Club club) {
         this.mClub = club;
-        Log.d(LOG_TAG,"Club set: "+club.name);
-        Log.d(LOG_TAG, "UserRowAdapter started.");
+//        Log.d(LOG_TAG,"Club set: "+club.name);
+        Log.d(LOG_TAG, "UserRowAdapter created.");
 
         this.context = context;
         this.layoutInflater = LayoutInflater.from(context);
@@ -67,6 +71,7 @@ public class UserRowAdapter extends RecyclerView.Adapter<UserRowAdapter.ViewHold
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
 //        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_row, null);
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.user_row, parent, false);
@@ -87,6 +92,12 @@ public class UserRowAdapter extends RecyclerView.Adapter<UserRowAdapter.ViewHold
     @Override
     public int getItemCount() {
         return (null != objects ? objects.size() : 0);
+    }
+
+    @Override
+    public void onViewAttachedToWindow(ViewHolder holder) {
+        Log.d(LOG_TAG, "onViewAttachedToWindow");
+        super.onViewAttachedToWindow(holder);
     }
 
 
@@ -131,7 +142,7 @@ public class UserRowAdapter extends RecyclerView.Adapter<UserRowAdapter.ViewHold
                 getAttendancesTask.execute();
             }
         }
-        //TODO implement
+
     }
 
     Filter myFilter = new Filter() {
@@ -174,6 +185,8 @@ public class UserRowAdapter extends RecyclerView.Adapter<UserRowAdapter.ViewHold
         return null;
     }
 
+
+
     private List<User> userListFromCursor(Cursor c) {
         List<User> result = new ArrayList<>();
 
@@ -185,9 +198,10 @@ public class UserRowAdapter extends RecyclerView.Adapter<UserRowAdapter.ViewHold
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        Log.d(LOG_TAG, "Data loaded.");
+
         switch (loader.getId()) {
             case LOADER_USERS: {
+                Log.d(LOG_TAG, "Data loaded.");
                 objects = userListFromCursor(data);
                 notifyDataSetChanged();
                 break;
@@ -200,7 +214,7 @@ public class UserRowAdapter extends RecyclerView.Adapter<UserRowAdapter.ViewHold
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
+        Log.d(LOG_TAG, "onLoaderReset");
     }
 
 

@@ -11,6 +11,7 @@ import android.os.Build;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -246,5 +247,20 @@ public class Utility {
 
     public static Drawable getIcon(long id) {
         return null;
+    }
+
+    public static void showKeyboard(Context context){
+        InputMethodManager imm = (InputMethodManager)
+                context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if(imm != null){
+            imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
+        }
+    }
+    public static void hideKeyboard(Context context){
+        InputMethodManager imm = (InputMethodManager)
+                context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if(imm != null){
+            imm.toggleSoftInput(0, InputMethodManager.HIDE_IMPLICIT_ONLY);
+        }
     }
 }
