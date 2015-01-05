@@ -19,6 +19,7 @@ import android.widget.Spinner;
 
 import com.yknx.android.club.R;
 import com.yknx.android.club.adapters.ClubAdapter;
+import com.yknx.android.club.callbacks.NavigationDrawerCallbacks;
 import com.yknx.android.club.model.NavigationItem;
 import com.yknx.android.club.util.Preferences;
 
