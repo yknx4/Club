@@ -71,10 +71,13 @@
 
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:src="@drawable/ic_action_forward"
+        android:adjustViewBounds="true"
+
+        android:src="@drawable/ic_add_black_24dp"
         style="?android:attr/borderlessButtonStyle"
 
-        android:contentDescription="@string/ADD_ATTENDANCE" />
+        android:contentDescription="@string/ADD_ATTENDANCE"
+        />
 
 
 </LinearLayout>
