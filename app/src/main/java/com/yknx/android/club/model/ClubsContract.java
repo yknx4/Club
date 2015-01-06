@@ -19,12 +19,12 @@ public class ClubsContract {
     public static final String PATH_USER = "user";
     public static final String PATH_REGISTRATIONS = "registrations";
     public static final String PATH_ASSISTS = "assists";
-    public static final String DATE_FORMAT = "yyyyMMdd";
+    public static final String DATE_FORMAT = "yyyyMMddHHmm";
     public static final String LOG_TAG = ClubsContract.class.getSimpleName();
 
     public static Date getDateFromDb(String dateString) {
         dateString = dateString.replaceAll("/", "");
-        SimpleDateFormat dbDateFormat = new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat dbDateFormat = new SimpleDateFormat("yyyyMMddHHmm");
         try {
             Log.v(LOG_TAG,"getDateFromDb: "+dateString);
             return dbDateFormat.parse(dateString);
@@ -196,6 +196,7 @@ public class ClubsContract {
         public static final String COLUMN_ASSIST_DATE = "date";
 
         public static Uri buildAssistUriWithRegistration(long id) {
+            if(id == RegistrationEntry.NO_REGISTRATION) id = Integer.MAX_VALUE;
             Uri contentUri = CONTENT_URI.buildUpon().appendPath(REGISTRATION_PATH).build();
             Log.v(LOG_TAG,"buildAssistUriWithRegistration(long): "+contentUri+ " with id "+id);
             return ContentUris.withAppendedId(contentUri, id);

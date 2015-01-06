@@ -14,11 +14,13 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.yknx.android.club.Utility;
+import com.yknx.android.club.controller.UserController;
+import com.yknx.android.club.model.Club;
 import com.yknx.android.club.model.ClubsContract;
 import com.yknx.android.club.model.ClubsContract.ClubEntry;
 import com.yknx.android.club.model.ClubsContract.RegistrationEntry;
 import com.yknx.android.club.model.ClubsContract.UserEntry;
-import com.yknx.android.club.model.Club;
+import com.yknx.android.club.model.User;
 
 /**
  * Created by Yknx on 07/08/2014.
@@ -62,6 +64,7 @@ public class ClubsProvider extends ContentProvider {
                         "." + RegistrationEntry._ID
         );
     }
+
     //TODO: sRegistrationQueryBuilder
     static {
         sRegistrationQueryBuilder = new SQLiteQueryBuilder();
@@ -96,7 +99,7 @@ public class ClubsProvider extends ContentProvider {
 
     private static void addMatchUri(UriMatcher matcher, String Path, int code) {
         matcher.addURI(URI_AUTORITHY, Path, code);
-        Log.d(LOG_TAG,"Added uri "+URI_AUTORITHY+"/"+Path+" with code "+code);
+        Log.d(LOG_TAG, "Added uri " + URI_AUTORITHY + "/" + Path + " with code " + code);
     }
 
     private static UriMatcher buildUriMatcher() {
@@ -112,7 +115,7 @@ public class ClubsProvider extends ContentProvider {
         addMatchUri(matcher, ClubsContract.PATH_REGISTRATIONS, REGISTRATION);
         addMatchUri(matcher, ClubsContract.PATH_REGISTRATIONS + "/" + RegistrationEntry.CLUB_PATH + "/#", REGISTRATION_CLUB);
         addMatchUri(matcher, ClubsContract.PATH_REGISTRATIONS + "/" + RegistrationEntry.USER_PATH + "/#", REGISTRATION_USER);
-        addMatchUri(matcher,ClubsContract.PATH_REGISTRATIONS+"/"+RegistrationEntry.ID_PATH+"/#",REGISTRATION_ID);
+        addMatchUri(matcher, ClubsContract.PATH_REGISTRATIONS + "/" + RegistrationEntry.ID_PATH + "/#", REGISTRATION_ID);
 
         addMatchUri(matcher, ClubsContract.PATH_ASSISTS, ASSIST);
         addMatchUri(matcher, ClubsContract.PATH_ASSISTS + "/" + ClubsContract.AttendanceEntry.REGISTRATION_PATH + "/#", ASSIST_WITH_REGISTRATION);
@@ -148,9 +151,10 @@ public class ClubsProvider extends ContentProvider {
                 sortOrder
         );
     }
-    private Cursor basicQueryWithDbAndQueryBuilder(SQLiteQueryBuilder qBuilder,SQLiteDatabase db, String[] projection, String selection, String[] selectionArgs,
-                                    String sortOrder){
-        return  qBuilder.query(db,projection,selection,selectionArgs,null,null,sortOrder);
+
+    private Cursor basicQueryWithDbAndQueryBuilder(SQLiteQueryBuilder qBuilder, SQLiteDatabase db, String[] projection, String selection, String[] selectionArgs,
+                                                   String sortOrder) {
+        return qBuilder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
 
     }
 
@@ -182,7 +186,7 @@ public class ClubsProvider extends ContentProvider {
                 break;
             }
             case ASSIST: {
-                retCursor = basicQueryWithDbAndQueryBuilder(sAssistQueryBuilder,mOpenHelper.getWritableDatabase(),projection,selection,selectionArgs,sortOrder);
+                retCursor = basicQueryWithDbAndQueryBuilder(sAssistQueryBuilder, mOpenHelper.getWritableDatabase(), projection, selection, selectionArgs, sortOrder);
                 break;
             }
             case CLUB_ID: {
@@ -193,12 +197,12 @@ public class ClubsProvider extends ContentProvider {
                 retCursor = basicQueryWithId(UserEntry.TABLE_NAME, UserEntry._ID, ContentUris.parseId(uri), projection, sortOrder);
                 break;
             }
-            case ASSIST_ID:{
-                retCursor = basicQueryWithId(ClubsContract.AttendanceEntry.TABLE_NAME, ClubsContract.AttendanceEntry._ID,ContentUris.parseId(uri),projection,sortOrder);
+            case ASSIST_ID: {
+                retCursor = basicQueryWithId(ClubsContract.AttendanceEntry.TABLE_NAME, ClubsContract.AttendanceEntry._ID, ContentUris.parseId(uri), projection, sortOrder);
                 break;
             }
-            case REGISTRATION_ID:{
-                retCursor = basicQueryWithId(RegistrationEntry.TABLE_NAME,RegistrationEntry._ID,ContentUris.parseId(uri),projection,sortOrder);
+            case REGISTRATION_ID: {
+                retCursor = basicQueryWithId(RegistrationEntry.TABLE_NAME, RegistrationEntry._ID, ContentUris.parseId(uri), projection, sortOrder);
                 break;
             }
 
@@ -227,7 +231,7 @@ public class ClubsProvider extends ContentProvider {
                 long registration = ContentUris.parseId(uri);
                 String customSelection = ClubsContract.AttendanceEntry.COLUMN_ASSIST_REGISTRATION + " = ?";
                 String[] customSelectionArgs = new String[]{registration + ""};
-                retCursor = basicQueryWithDbAndQueryBuilder(sAssistQueryBuilder,mOpenHelper.getWritableDatabase(),projection,customSelection,customSelectionArgs,sortOrder);
+                retCursor = basicQueryWithDbAndQueryBuilder(sAssistQueryBuilder, mOpenHelper.getWritableDatabase(), projection, customSelection, customSelectionArgs, sortOrder);
 //                retCursor = basicQuery(RegistrationEntry.TABLE_NAME, projection, customSelection, customSelectionArgs, sortOrder);
                 break;
             }
@@ -237,14 +241,23 @@ public class ClubsProvider extends ContentProvider {
                 String customSelection = ClubsContract.AttendanceEntry.COLUMN_ASSIST_REGISTRATION + " = ? AND " +
                         ClubsContract.AttendanceEntry.COLUMN_ASSIST_TERM + " = ? ";
                 String[] customSelectionArgs = new String[]{registration, term + ""};
-                retCursor = basicQueryWithDbAndQueryBuilder(sAssistQueryBuilder,mOpenHelper.getWritableDatabase(),projection,customSelection,customSelectionArgs,sortOrder);
+
+                Log.v(LOG_TAG, "ASSIST_WITH_REGISTRATION_AND_TERM :\n" +
+                        "Projection : " + projection + "\n" +
+                        "Selection : " + customSelection + "\n" +
+                        "Selection Args : " + customSelectionArgs + "\n" +
+                        "Sort Order : " + sortOrder + "\n" +
+                        "");
+
+                retCursor = basicQueryWithDbAndQueryBuilder(sAssistQueryBuilder, mOpenHelper.getWritableDatabase(), projection, customSelection, customSelectionArgs, sortOrder);
+
                 break;
             }
             case ASSIST_WITH_DATE: {
                 String date = ClubsContract.AttendanceEntry.getDateFromUri(uri);
                 String customSelection = ClubsContract.AttendanceEntry.COLUMN_ASSIST_DATE + " = ?";
                 String[] customSelectionArgs = new String[]{date};
-                retCursor = basicQueryWithDbAndQueryBuilder(sAssistQueryBuilder,mOpenHelper.getWritableDatabase(),projection,customSelection,customSelectionArgs,sortOrder);
+                retCursor = basicQueryWithDbAndQueryBuilder(sAssistQueryBuilder, mOpenHelper.getWritableDatabase(), projection, customSelection, customSelectionArgs, sortOrder);
                 break;
             }
 
@@ -279,7 +292,7 @@ public class ClubsProvider extends ContentProvider {
                 return RegistrationEntry.CONTENT_TYPE;
 
             case ASSIST_ID:
-                return  ClubsContract.AttendanceEntry.CONTENT_ITEM_TYPE;
+                return ClubsContract.AttendanceEntry.CONTENT_ITEM_TYPE;
             case ASSIST:
             case ASSIST_WITH_REGISTRATION:
             case ASSIST_WITH_REGISTRATION_AND_TERM:
@@ -372,16 +385,16 @@ public class ClubsProvider extends ContentProvider {
 
     @Override
     public int bulkInsert(Uri uri, ContentValues[] values) {
-        return  super.bulkInsert(uri,values);
+        return super.bulkInsert(uri, values);
     }
 
 
-    private int basicUpdate(String tableName,Uri toNotify, ContentValues values, String selection, String[] selectionArgs){
+    private int basicUpdate(String tableName, Uri toNotify, ContentValues values, String selection, String[] selectionArgs) {
         int affected = mOpenHelper.getWritableDatabase().update(tableName, values, selection, selectionArgs);
         if (affected > 0) {
             getContext().getContentResolver().notifyChange(toNotify, null);
         } else throw new SQLException("Failed to update row");
-        return  affected;
+        return affected;
     }
 
     @Override
@@ -389,19 +402,19 @@ public class ClubsProvider extends ContentProvider {
         int affected;
         final int match = mUriMatcher.match(uri);
         switch (match) {
-            case CLUB:{
-                affected = basicUpdate(ClubEntry.TABLE_NAME,ClubEntry.CONTENT_URI,values,selection,selectionArgs);
+            case CLUB: {
+                affected = basicUpdate(ClubEntry.TABLE_NAME, ClubEntry.CONTENT_URI, values, selection, selectionArgs);
                 break;
             }
-            case USER:{
-                affected = basicUpdate(UserEntry.TABLE_NAME,UserEntry.CONTENT_URI,values,selection,selectionArgs);
+            case USER: {
+                affected = basicUpdate(UserEntry.TABLE_NAME, UserEntry.CONTENT_URI, values, selection, selectionArgs);
                 break;
             }
-            case REGISTRATION:{
+            case REGISTRATION: {
                 affected = basicUpdate(RegistrationEntry.TABLE_NAME, RegistrationEntry.CONTENT_URI, values, selection, selectionArgs);
                 break;
             }
-            case ASSIST:{
+            case ASSIST: {
                 affected = basicUpdate(RegistrationEntry.TABLE_NAME, RegistrationEntry.CONTENT_URI, values, selection, selectionArgs);
                 break;
             }
@@ -413,51 +426,60 @@ public class ClubsProvider extends ContentProvider {
         return affected;
     }
 
-public static long addClub(Context mContext, String name, String color){
-    ContentResolver mContentResolver = mContext.getContentResolver();
-
-    ContentValues clubValues = Utility.createClubValues(name,color);
-
-    return ContentUris.parseId(mContentResolver.insert(ClubsContract.ClubEntry.CONTENT_URI, clubValues));
-
-}
-    public static Club getClub(Context mContext,long clubId){
+    public static long addClub(Context mContext, String name, String color) {
         ContentResolver mContentResolver = mContext.getContentResolver();
-        Cursor data = mContentResolver.query(ClubsContract.ClubEntry.buildClubUri(clubId),null,null,null,null);
+
+        ContentValues clubValues = Utility.createClubValues(name, color);
+
+        return ContentUris.parseId(mContentResolver.insert(ClubsContract.ClubEntry.CONTENT_URI, clubValues));
+
+    }
+
+    public static Club getClub(Context mContext, long clubId) {
+        ContentResolver mContentResolver = mContext.getContentResolver();
+        Cursor data = mContentResolver.query(ClubsContract.ClubEntry.buildClubUri(clubId), null, null, null, null);
         Club result = new Club();
         result.id = clubId;
-        if(data.moveToFirst()){
+        if (data.moveToFirst()) {
 
 
-        result.name = data.getString(data.getColumnIndex(ClubsContract.ClubEntry.COLUMN_CLUB_NAME));
-        result.color = data.getString(data.getColumnIndex(ClubsContract.ClubEntry.COLUMN_CLUB_COLOR));
-        result.icon = Uri.parse(data.getString(data.getColumnIndex(ClubEntry.COLUMN_CLUB_ICON_URI)));
-        result.atLeast = data.getInt(data.getColumnIndex(ClubEntry.COLUMN_CLUB_ATLEAST));
-        result.terms = data.getInt(data.getColumnIndex(ClubEntry.COLUMN_CLUB_TERMS));
+            result.name = data.getString(data.getColumnIndex(ClubsContract.ClubEntry.COLUMN_CLUB_NAME));
+            result.color = data.getString(data.getColumnIndex(ClubsContract.ClubEntry.COLUMN_CLUB_COLOR));
+            result.icon = Uri.parse(data.getString(data.getColumnIndex(ClubEntry.COLUMN_CLUB_ICON_URI)));
+            result.atLeast = data.getInt(data.getColumnIndex(ClubEntry.COLUMN_CLUB_ATLEAST));
+            result.terms = data.getInt(data.getColumnIndex(ClubEntry.COLUMN_CLUB_TERMS));
         }
         return result;
     }
+    public static User getUser(Context mContext, long clubId) {
+        ContentResolver mContentResolver = mContext.getContentResolver();
+        Cursor data = mContentResolver.query(ClubsContract.UserEntry.buildUserUri(clubId), null, null, null, null);
+        if (data.moveToFirst()) {
+            return UserController.getFromCursor(data);
+        }
+        return null;
+    }
 
-    public static int getRegistration(Context mContext,long clubId, long userId){
+    public static int getRegistration(Context mContext, long clubId, long userId) {
         ContentResolver mContentResolver = mContext.getContentResolver();
         Uri userClubs = RegistrationEntry.builRegistrationUriWithUser(userId);
-        Cursor cUserClubs = mContentResolver.query(userClubs,null,null,null,null);
-        if(hasClub(cUserClubs,clubId)){
+        Cursor cUserClubs = mContentResolver.query(userClubs, null, null, null, null);
+        if (hasClub(cUserClubs, clubId)) {
             int id = cUserClubs.getInt(cUserClubs.getColumnIndex(RegistrationEntry._ID));
 
             return id;
-        }
-        else {
+        } else {
             return RegistrationEntry.NO_REGISTRATION;
         }
     }
-    private static Boolean hasClub (Cursor data, long clubId){
-        if(data.moveToFirst()){
+
+    private static Boolean hasClub(Cursor data, long clubId) {
+        if (data.moveToFirst()) {
             long regClub;
             int columnId = data.getColumnIndex(RegistrationEntry.COLUMN_REGISTRATION_CLUB);
-            do{
+            do {
                 regClub = data.getLong(columnId);
-                if(regClub==clubId) return true;
+                if (regClub == clubId) return true;
             }
             while (data.moveToNext());
         }
@@ -465,7 +487,7 @@ public static long addClub(Context mContext, String name, String color){
 
     }
 
-    public static int updateClub(Context mContext, Club club){
+    public static int updateClub(Context mContext, Club club) {
         ContentValues updatedValues = Utility.createClubValues(club);
         int count = mContext.getContentResolver().update(
                 ClubEntry.CONTENT_URI, updatedValues, ClubEntry._ID + "= ?",

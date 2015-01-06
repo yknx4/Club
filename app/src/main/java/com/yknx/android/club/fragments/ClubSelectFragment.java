@@ -27,6 +27,7 @@ import com.yknx.android.club.adapters.ClubAdapter;
 import com.yknx.android.club.R;
 import com.yknx.android.club.activities.SaveCreate_Club;
 import com.yknx.android.club.Utility;
+import com.yknx.android.club.model.Club;
 import com.yknx.android.club.model.ClubsContract;
 import com.yknx.android.club.util.Preferences;
 
@@ -51,8 +52,6 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-
-
         String sortOrder = ClubsContract.ClubEntry.COLUMN_CLUB_NAME + " ASC ";
         return new CursorLoader(getActivity(), ClubsContract.ClubEntry.CONTENT_URI, null, null, null, sortOrder);
     }
@@ -122,6 +121,7 @@ public class ClubSelectFragment extends Fragment implements LoaderManager.Loader
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        getLoaderManager().destroyLoader(CLUB_LOADER);
         getLoaderManager().initLoader(CLUB_LOADER, null, this);
     }
 

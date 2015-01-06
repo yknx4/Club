@@ -18,6 +18,7 @@ import android.widget.Spinner;
 
 
 import com.yknx.android.club.R;
+import com.yknx.android.club.Utility;
 import com.yknx.android.club.adapters.ClubAdapter;
 import com.yknx.android.club.callbacks.NavigationDrawerCallbacks;
 import com.yknx.android.club.model.NavigationItem;
@@ -45,12 +46,12 @@ public class ClubsNavigationDrawerFragment extends android.support.v4.app.Fragme
 
     private OnSpinnerClick mOnSpinnerClick;
     private Long mClub = ClubAdapter.INVALID_CLUB_ID; //TODO: IMPLEMENT CLUB ID LOADING
-
+    View view;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
+        view = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         mDrawerList = (RecyclerView) view.findViewById(R.id.drawerList);
         mSpinnerTerms = (Spinner) view.findViewById(R.id.spinnerTerms);
 
@@ -65,8 +66,8 @@ public class ClubsNavigationDrawerFragment extends android.support.v4.app.Fragme
         adapter.setNavigationDrawerCallbacks(this);
         mDrawerList.setAdapter(adapter);
         selectItem(mCurrentSelectedPosition);
-        mSpinnerTerms.setSelection(currentTerm());
-        mSpinnerTerms.setOnItemSelectedListener(mOnSpinnerClick);
+
+
         return view;
     }
 
@@ -105,6 +106,9 @@ public class ClubsNavigationDrawerFragment extends android.support.v4.app.Fragme
 
     public void setup(int fragmentId, DrawerLayout drawerLayout, Toolbar toolbar, long mClub) {
         this.mClub = mClub;
+        Utility.setHeader(view,mClub,getActivity());
+        mSpinnerTerms.setSelection(currentTerm()-1);
+        mSpinnerTerms.setOnItemSelectedListener(mOnSpinnerClick);
         mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
         mActionBarDrawerToggle = new ActionBarDrawerToggle(getActivity(), mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
@@ -208,7 +212,10 @@ public class ClubsNavigationDrawerFragment extends android.support.v4.app.Fragme
     private class OnSpinnerClick implements AdapterView.OnItemSelectedListener{
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            Preferences.saveSharedSettingInt(getActivity(), STATE_SELECTED_TERM, position);
+            //Preferences.saveSharedSettingInt(getActivity(), STATE_SELECTED_TERM, position);
+            Preferences.writeSelectedTerm(getActivity(),mClub,position+1);
+
+            selectItem(0);
         }
 
         @Override

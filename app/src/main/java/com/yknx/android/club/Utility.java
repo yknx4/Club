@@ -8,6 +8,8 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -18,6 +20,7 @@ import android.widget.TextView;
 
 import com.yknx.android.club.model.ClubsContract;
 import com.yknx.android.club.model.Club;
+import com.yknx.android.club.model.User;
 import com.yknx.android.club.util.Preferences;
 
 import java.util.Date;
@@ -29,6 +32,8 @@ import java.util.Random;
 public class Utility {
 
     private static final String LOG_TAG = Utility.class.getSimpleName();
+    private static final String CLUB_ID = "club_id";
+    private static final String USER_ID = "user_id";
 
 
     public static ContentValues createClubValues(Club club) {
@@ -151,7 +156,7 @@ public class Utility {
 
         testValues.put(ClubsContract.AttendanceEntry.COLUMN_ASSIST_REGISTRATION, registrationId);
         testValues.put(ClubsContract.AttendanceEntry.COLUMN_ASSIST_TERM, term);
-        testValues.put(ClubsContract.AttendanceEntry.COLUMN_ASSIST_DATE, "20140910");
+        testValues.put(ClubsContract.AttendanceEntry.COLUMN_ASSIST_DATE, "201409101314");
         return testValues;
     }
 
@@ -190,6 +195,12 @@ public class Utility {
 
     }
 
+
+    public static void updateHeaderTerm(View view, Long clubId, Context mContext) {
+        TextView termView = (TextView) view.findViewById(R.id.fragment_club_select_term_textview);
+        String term = mContext.getString(R.string.format_terms, Preferences.getSelectedTerm(mContext,clubId));
+        if (termView != null) termView.setText(term);
+    }
     public static void setHeader(View rootView, int position, Cursor cursor, Context mContext) {
         if (!cursor.moveToPosition(position)) return;
         String icon_uri = cursor.getString(cursor.getColumnIndex(ClubsContract.ClubEntry.COLUMN_CLUB_ICON_URI));
@@ -210,7 +221,7 @@ public class Utility {
         Random mRandom = new Random();
 
         String users = mContext.getString(R.string.format_users, clubs.getCount());
-        String term = mContext.getString(R.string.format_terms, Preferences.getSelectedTerm(mContext,clubId)+1);
+        String term = mContext.getString(R.string.format_terms, Preferences.getSelectedTerm(mContext,clubId));
 
 
         if (nameView != null) nameView.setText(name);
@@ -263,4 +274,24 @@ public class Utility {
             imm.toggleSoftInput(0, InputMethodManager.HIDE_IMPLICIT_ONLY);
         }
     }
+    
+    public static Bundle putClub(Club club, Bundle bundle){
+        return putClub(club.id,bundle);
+    }
+    public static Bundle putClub(long id, Bundle bundle){
+        return putID(id, CLUB_ID,bundle);
+    }
+    public static Bundle putUser(User user, Bundle bundle) {return putUser(user.getId(),bundle);}
+
+    public static Bundle putUser(long id, Bundle bundle) {
+        return putID(id,USER_ID,bundle);
+    }
+
+    public static Bundle putID(long id, String paramName, Bundle bundle){
+        if(bundle == null) bundle = new Bundle();
+        bundle.putLong(paramName, id);
+        return bundle;
+    }
+
+
 }

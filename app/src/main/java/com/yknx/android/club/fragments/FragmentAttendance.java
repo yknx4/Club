@@ -20,11 +20,12 @@ import android.widget.Toast;
 
 import com.yknx.android.club.R;
 import com.yknx.android.club.Utility;
+import com.yknx.android.club.activities.ClubDataActivity;
 import com.yknx.android.club.callbacks.FragmentUserDetailsCallbacks;
 import com.yknx.android.club.callbacks.UserRowAdapterCallbacks;
-import com.yknx.android.club.model.ClubsContract;
 import com.yknx.android.club.data.ClubsProvider;
 import com.yknx.android.club.model.Club;
+import com.yknx.android.club.model.ClubsContract;
 import com.yknx.android.club.model.User;
 import com.yknx.android.club.util.FragmentUtility;
 import com.yknx.android.club.util.Preferences;
@@ -32,6 +33,11 @@ import com.yknx.android.club.util.Preferences;
 public class FragmentAttendance extends Fragment implements UserRowAdapterCallbacks, FragmentUserDetailsCallbacks {
 
     private static final String LOG_TAG = FragmentAttendance.class.getSimpleName();
+    private static final String CLUB_ID = "club_id";
+    private static final String USER_LIST_LOADED = "user_list_loaded";
+    private static final String EDIT_TEXT_CONTENT = "edit_text_content";
+    private static final String USER_ID = "user_id";
+
 
     private FrameLayout mTopContainer;
     private CardView mCardContainer;
@@ -39,13 +45,61 @@ public class FragmentAttendance extends Fragment implements UserRowAdapterCallba
     private FrameLayout mBottomContainer;
     private EditText mDigitsEditText;
     private Club mClub;
+    private boolean mIsSaved = false;
 
+    private class OnBackPressedListener implements com.yknx.android.club.listeners.OnBackPressedListener {
+
+
+
+        @Override
+        public void doBack() {
+            if (mLoadingUserData) {
+                onCloseClick();
+
+            } else {
+                Log.d(LOG_TAG, "Standard fragment back.");
+                ((ClubDataActivity)getActivity()).onBackPressed(true);
+            }
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.d(LOG_TAG, "Saving fragment state.");
+        mIsSaved = true;
+        outState.putLong(CLUB_ID, mClub.id);
+        outState.putBoolean(USER_LIST_LOADED, mCurrentUser == null);
+        outState.putString(EDIT_TEXT_CONTENT, mDigitsEditText.getText().toString());
+        if (currentUserInfo != null) {
+            outState.putLong(USER_ID, mCurrentUser.getId());
+        }
+
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mIsSaved = savedInstanceState != null;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        if (mClub == null) {
+            Bundle args = getArguments();
+            Log.d(LOG_TAG, "Club shouldn't be null");
+            if (mIsSaved) {
+                mClub = ClubsProvider.getClub(getActivity(), savedInstanceState.getLong(CLUB_ID));
+            } else if (args != null) {
+                mClub = ClubsProvider.getClub(getActivity(), args.getLong(CLUB_ID));
+            } else {
+                Log.d(LOG_TAG, "Something is realy wrong.!");
+            }
+        }
 
+        ((ClubDataActivity) getActivity()).setOnBackPressedListener(new OnBackPressedListener());
         return inflater.inflate(R.layout.fragment_attendance, null);
     }
 
@@ -61,8 +115,28 @@ public class FragmentAttendance extends Fragment implements UserRowAdapterCallba
         mDigitsEditText = (EditText) getView().findViewById(R.id.digits);
         mCardContainer = (CardView) getView().findViewById(R.id.card_container);
         customTextWatcher = new CustomTextWatcher();
+
         mDigitsEditText.addTextChangedListener(customTextWatcher);
-        createUserList();
+
+        if (mIsSaved) {
+            boolean userList = savedInstanceState.getBoolean(USER_LIST_LOADED);
+            Log.d(LOG_TAG, "Restoring saved fragment with" + (userList ? " user list." : " user details."));
+            if (userList) {
+                deleteUserInfo();
+                createUserList();
+                mDigitsEditText.setText(savedInstanceState.getString(EDIT_TEXT_CONTENT));
+            } else {
+                mLoadingUserData = true;
+                mCurrentUser = ClubsProvider.getUser(getActivity(), savedInstanceState.getLong(USER_ID));
+                deleteUserList();
+                createUserDetails(mCurrentUser);
+            }
+
+        } else {
+            createUserList();
+        }
+
+
     }
 
 
@@ -73,25 +147,32 @@ public class FragmentAttendance extends Fragment implements UserRowAdapterCallba
     }
 
     private void createUserList() {
-        Log.d(LOG_TAG,"Creating user list.");
+        Log.d(LOG_TAG, "Creating user list.");
         setCardContainerHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         mTopContainer.setVisibility(View.VISIBLE);
-        FragmentUserList fragmentUserList = new FragmentUserList();
-        fragmentUserList.setClub(mClub);
-        fragmentUserList.setAdapterCallback(this);
-        currentUserList = fragmentUserList;
+        mBottomContainer.setVisibility(View.GONE);
+        createUserListFragment();
         FragmentUtility.replaceFragment(R.id.top_container, currentUserList, getActivity());
         customTextWatcher.setParent((FragmentUserList) currentUserList);
         ((FragmentUserList) currentUserList).filter(mDigitsEditText.getText());
     }
 
+    private void createUserListFragment() {
+        FragmentUserList fragmentUserList = new FragmentUserList();
+        Bundle args = Utility.putClub(mClub, null);
+        fragmentUserList.setClub(mClub);
+        fragmentUserList.setArguments(args);
+        fragmentUserList.setAdapterCallback(this);
+        currentUserList = fragmentUserList;
+    }
+
     @Override
     public void onCloseClick() {
-        Log.d(LOG_TAG,"Clicked close");
+        Log.d(LOG_TAG, "Clicked close");
         mLoadingUserData = false;
 
-        if(currentUserList==null)createUserList();
-        if(currentUserInfo!=null)deleteUserInfo();
+        if (currentUserList == null) createUserList();
+        if (currentUserInfo != null) deleteUserInfo();
         if (mDigitsEditText.requestFocus()) {
             getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
@@ -103,39 +184,45 @@ public class FragmentAttendance extends Fragment implements UserRowAdapterCallba
     }
 
 
+    User mCurrentUser = null;
 
-    private void createUserInfo(User user) {
+    private void createUserDetails(User user) {
         Log.d(LOG_TAG, "Creating user info.");
+        mCurrentUser = user;
+        setCardContainerHeight(ViewGroup.LayoutParams.MATCH_PARENT);
+        mTopContainer.setVisibility(View.GONE);
         mBottomContainer.setVisibility(View.VISIBLE);
         UserDetailsFragment userDetailsFragment = new UserDetailsFragment();
         userDetailsFragment.setFragmentUserDetailsCallbacks(this);
+        Bundle args = Utility.putClub(mClub, null);
+        args = Utility.putUser(user, args);
+        userDetailsFragment.setArguments(args);
         userDetailsFragment.setClub(mClub);
         userDetailsFragment.setUser(user);
         currentUserInfo = userDetailsFragment;
         FragmentUtility.replaceFragment(R.id.bottom_container, currentUserInfo, getActivity());
         setDigitEditTextStatus(false);
-        mDigitsEditText.setText(user.getAccount());
+        setDigitsEditTextContent(user.getAccount(), false);
 
 
     }
 
     private void setDigitEditTextStatus(boolean state) {
-       mDigitsEditText.setFocusable(state);
+        mDigitsEditText.setFocusable(state);
         mDigitsEditText.setFocusableInTouchMode(state);
         mDigitsEditText.setLongClickable(state);
     }
 
     private void deleteUserInfo() {
-        mBottomContainer.setVisibility(View.GONE);
         Log.d(LOG_TAG, "Deleting user info.");
         FragmentUtility.deleteFragment(currentUserInfo, getActivity());
         currentUserInfo = null;
+        mCurrentUser = null;
         setDigitEditTextStatus(true);
     }
 
     private void deleteUserList() {
         mTopContainer.setVisibility(View.GONE);
-        setCardContainerHeight(ViewGroup.LayoutParams.MATCH_PARENT);
         Log.d(LOG_TAG, "Deleting user list.");
         customTextWatcher.setParent(null);
         FragmentUtility.deleteFragment(currentUserList, getActivity());
@@ -151,7 +238,7 @@ public class FragmentAttendance extends Fragment implements UserRowAdapterCallba
         Log.d(LOG_TAG, "Click on " + user.getName() + " on position " + position + ".");
         mLoadingUserData = true;
         Utility.hideKeyboard(getActivity());
-        if (currentUserInfo == null) createUserInfo(user);
+        if (currentUserInfo == null) createUserDetails(user);
         if (currentUserList != null) deleteUserList();
 
     }
@@ -219,8 +306,9 @@ public class FragmentAttendance extends Fragment implements UserRowAdapterCallba
             } else {
                 if (!mLoadingUserData) {
                     if (currentUserList == null) {
+                        Log.d(LOG_TAG, "createUserList() <- onTextChanged");
                         createUserList();
-                        Log.d(LOG_TAG, "Created");
+
                     }
                     if (currentUserInfo != null) {
                         deleteUserInfo();
@@ -241,4 +329,14 @@ public class FragmentAttendance extends Fragment implements UserRowAdapterCallba
 
     }
 
+
+    private void setDigitsEditTextContent(String content, boolean triggerOnEdit) {
+        if (!triggerOnEdit) {
+            mDigitsEditText.removeTextChangedListener(customTextWatcher);
+        }
+        mDigitsEditText.setText(content);
+        if (!triggerOnEdit) {
+            mDigitsEditText.addTextChangedListener(customTextWatcher);
+        }
+    }
 }

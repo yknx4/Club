@@ -14,12 +14,15 @@ import android.support.v7.widget.RecyclerView;
 import com.yknx.android.club.R;
 import com.yknx.android.club.adapters.UserRowAdapter;
 import com.yknx.android.club.callbacks.UserRowAdapterCallbacks;
+import com.yknx.android.club.data.ClubsProvider;
 import com.yknx.android.club.model.Club;
+import com.yknx.android.club.model.User;
 import com.yknx.android.club.util.DividerItemDecoration;
 
 public class FragmentUserList extends Fragment {
 
 private static final String LOG_TAG = FragmentUserList.class.getSimpleName();
+    private static final String CLUB_ID = "club_id";
 
     private RecyclerView userRecyclerview;
     private UserRowAdapter mAdapter;
@@ -33,6 +36,17 @@ private static final String LOG_TAG = FragmentUserList.class.getSimpleName();
                              Bundle savedInstanceState) {
         Log.d(LOG_TAG, "onCreateView");
         View finalView = inflater.inflate(R.layout.fragment_user_list, null);
+        if(mClub == null){
+            Bundle args = getArguments();
+            Log.d(LOG_TAG,"Club shouldn't be null");
+             if(args != null){
+                mClub = ClubsProvider.getClub(getActivity(),args.getLong(CLUB_ID));
+            }
+            else {
+                Log.d(LOG_TAG,"Something is realy wrong.!");
+            }
+        }
+
 
         return finalView;
     }
@@ -68,11 +82,13 @@ private static final String LOG_TAG = FragmentUserList.class.getSimpleName();
 
     }
 
+
     @Override
     public void onResume() {
         Log.d(LOG_TAG, "onResume");
         super.onResume();
         if(mAdapter!=null)mAdapter.getFilter().filter(lastFilter);
+        userRecyclerview.swapAdapter(mAdapter,true);
         if(adapterCallback!=null) mAdapter.setUserRowAdapterCallbacks(adapterCallback);
 
     }

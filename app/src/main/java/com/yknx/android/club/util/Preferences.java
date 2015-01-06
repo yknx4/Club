@@ -3,6 +3,8 @@ package com.yknx.android.club.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.yknx.android.club.Utility;
+
 /**
  * Created by Yknx on 04/01/2015.
  */
@@ -17,9 +19,12 @@ public class Preferences {
     public static final String PREFERENCES_FILE = "com.yknx.android.club.preferences";
 
     public static int getSelectedTerm(Context context, Long clubId){
-       //return Utility.readSharedSettingInt(context, PREF_SELECTED_TERM+clubId, 0);
-        return readSharedSettingInt(context, PREF_SELECTED_TERM, DEFAULT_VALUE_INT);
+       return readSharedSettingInt(context, PREF_SELECTED_TERM + clubId, 0);
+       // return readSharedSettingInt(context, PREF_SELECTED_TERM, DEFAULT_VALUE_INT);
    }
+    public static void writeSelectedTerm(Context context, long clubId, int term){
+       saveSharedSettingInt(context, PREF_SELECTED_TERM + clubId, term);
+    }
 
    public static long getLastSelectedClub(Context context){
        return readSharedSettingLong(context, PREF_LAST_SELECTED_CLUB, DEFAULT_VALUE_LONG);
